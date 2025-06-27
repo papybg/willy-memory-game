@@ -57,7 +57,26 @@
   </style>
 </head>
 <body>
+<!-- 🎯 ТЕМА -->
+<div id="themeOptions">
+  <p><strong>Избери тема:</strong></p>
+  <label><input type="radio" name="theme" value="cars"> Коли</label><br>
+  <label><input type="radio" name="theme" value="animals"> Животни</label><br>
+  <label><input type="radio" name="theme" value="flowers"> Цветя</label>
+</div>
 
+<!-- 🎯 БРОЙ КАРТИНКИ -->
+<div id="countOptions">
+  <p><strong>Колко картинки да се покажат?</strong></p>
+  <label><input type="radio" name="count" value="2"> 2</label><br>
+  <label><input type="radio" name="count" value="3" checked> 3</label><br>
+  <label><input type="radio" name="count" value="4"> 4</label><br>
+  <label><input type="radio" name="count" value="5"> 5</label>
+</div>
+
+<!-- 🎯 БУТОН ЗА СТАРТ -->
+<button id="startGameBtn" disabled>Започни играта</button>
+  
   <h1>Познай КОЛАТА!</h1>
   <div id="controls">
     <button id="start">СТАРТ</button>
