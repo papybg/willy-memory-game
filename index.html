@@ -5,11 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Познай КОЛАТА!</title>
   <style>
-    body { font-family: Arial, sans-serif; margin:20px; text-align:center; }
-    #container { display: flex; justify-content:center; gap:30px; margin-top:20px; }
-    #allPics img { width:80px; cursor:pointer; display:block; margin-bottom:10px; }
-    #gamePics img { width:150px; height:150px; object-fit:contain; cursor:pointer; margin-right:10px; }
-    button { padding:10px 20px; margin:5px; font-size:16px; cursor:pointer; }
+    body {
+      font-family: Arial, sans-serif;
+      margin:20px;
+      text-align:center;
+    }
+    #container {
+      display: flex;
+      justify-content: flex-start;
+      gap:30px;
+      margin-top:20px;
+    }
+    #allPics, #gamePics {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      min-width: 230px;
+    }
+    #allPics img,
+    #gamePics img {
+      width: 220px;
+      height: 220px;
+      object-fit: contain;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    button {
+      padding:10px 20px;
+      margin:5px;
+      font-size:16px;
+      cursor:pointer;
+    }
   </style>
 </head>
 <body>
@@ -32,7 +58,6 @@
     const startBtn = document.getElementById('start');
     const reloadBtn = document.getElementById('reload');
 
-    // 1. При зареждане – показваме ВСИЧКИ картинки
     function renderAllPics() {
       allPicsEl.innerHTML = '';
       IMAGES.forEach(name => {
@@ -44,7 +69,6 @@
       });
     }
 
-    // 2. При зареждането – избираме 3 централни картинки
     function renderGamePics() {
       gamePicsEl.innerHTML = '';
       selected = IMAGES.sort(() => 0.5 - Math.random()).slice(0,3);
@@ -56,11 +80,10 @@
       });
     }
 
-    // При зареждане на страницата:
+    // Начално зареждане
     renderAllPics();
     renderGamePics();
 
-    // 3. При натискане на СТАРТ – скриваме една централна картинка
     startBtn.addEventListener('click', () => {
       if (awaiting) return;
       hiddenIndex = Math.floor(Math.random() * 3);
@@ -68,7 +91,6 @@
       awaiting = true;
     });
 
-    // 4. Детето избира картинка от колона
     function chooseHandler(e) {
       if (!awaiting) return;
       const chosen = e.target.dataset.name;
@@ -76,16 +98,15 @@
       if (chosen === hidden) {
         alert('Браво, Уйли!');
         awaiting = false;
-        reloadBtn.style.display = 'inline-block';
+        reloadBtn.style.display = 'inline';
       } else {
         alert('Опитай пак!');
       }
     }
 
-    // 5. При натискане на РЕЛОАД – нов кръг
     reloadBtn.addEventListener('click', () => {
-      reloadBtn.style.display = 'none';
       awaiting = false;
+      reloadBtn.style.display = 'none';
       renderGamePics();
     });
   </script>
