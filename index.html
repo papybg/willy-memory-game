@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Гледай внимателно – Познай играчката!</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f8ff;
+      margin: 0;
+      padding: 20px;
+    }
+    .header { text-align: center; }
+    .choices {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;
+    }
+    .choices button {
+      width: 100px; height: 100px; border: none; border-radius: 10px;
+      overflow: hidden; background-color: #eee; cursor: pointer;
+    }
+    .choices img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .gameArea {
+      display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;
+    }
+    .gameArea .box {
+      width: 150px; height: 150px; border-radius: 12px; background: white;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+    }
+    .controls {
+      text-align: center; margin-top: 20px;
+    }
+    .controls button {
+      padding: 10px 20px; font-size: 18px; border: none; border-radius: 12px;
+      background: #4facfe; color: white; cursor: pointer; margin: 0 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Гледай внимателно – Познай играчката!</h1>
+    <button onclick="toggleLanguage()">EN / BG</button>
+  </div>
+  <div class="choices" id="choices"></div>
+  <div class="gameArea" id="gameArea"></div>
+  <div class="controls">
+    <button onclick="newRound()">Отново</button>
+    <button onclick="checkAnswer()">Вярно</button>
+  </div>
+<script>
+  const images = ['car.png', 'bus.png', 'train.png', 'plane.png', 'truck.png'];
+  let currentSet = [];
+  let hiddenIndex = -1;
+  let currentLang = 'bg';
+
+  function newRound() {
+    const area = document.getElementById('gameArea');
+    const choices = document.getElementById('choices');
+    area.innerHTML = '';
+    currentSet = images.sort(() => 0.5 - Math.random()).slice(0, 3);
+    hiddenIndex = Math.floor(Math.random() * 3);
+
+    currentSet.forEach((img, i) => {
+      const box = document.createElement('div');
+      box.className = 'box';
+      if (i !== hiddenIndex) {
+        const image = document.createElement('img');
+        image.src = 'images/' + img;
+        image.style.maxWidth = '100%';
+        box.appendChild(image);
+      }
+      area.appendChild(box);
+    });
+
+    choices.innerHTML = '';
+    images.forEach((img) => {
+      const btn = document.createElement('button');
+      const image = document.createElement('img');
+      image.src = 'images/' + img;
+      btn.appendChild(image);
+      btn.onclick = () => {
+        if (currentSet[hiddenIndex] === img) {
+          playSound(true);
+        } else {
+          playSound(false);
+        }
+      };
+      choices.appendChild(btn);
+    });
+  }
+
+  function checkAnswer() {
+    playSound(true);
+  }
+
+  function toggleLanguage() {
+    currentLang = currentLang === 'bg' ? 'en' : 'bg';
+  }
+
+  function playSound(correct) {
+    const audio = new Audio(currentLang === 'bg'
+      ? (correct ? 'audio/bravo_bg.mp3' : 'audio/opitai_bg.mp3')
+      : (correct ? 'audio/bravo_en.mp3' : 'audio/try_en.mp3'));
+    audio.play();
+  }
+
+  window.onload = newRound;
+</script>
+</body>
+</html>
