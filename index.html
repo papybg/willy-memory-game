@@ -3,106 +3,90 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Гледай внимателно – Познай КОЛАТА!</title>
+  <title>Познай КОЛАТА!</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    h1 { text-align: center; }
-    #container { display: flex; gap: 20px; }
-    #allPics { display: flex; flex-direction: column; gap: 10px; }
-    #allPics img { width: 100px; cursor: pointer; }
-    #middle { display: flex; flex-direction: column; align-items: center; flex-grow: 1; }
-    #gamePics { display: flex; gap: 10px; margin: 20px 0; }
-    #gamePics img { width: 180px; height: 180px; object-fit: contain; cursor: pointer; }
-    #controls { text-align: center; }
-    button { padding: 10px 20px; font-size: 18px; cursor: pointer; }
-    #reload { display: none; margin-top: 10px; }
+    body { font-family: Arial, sans-serif; margin:20px; text-align:center; }
+    #container { display: flex; justify-content:center; gap:30px; margin-top:20px; }
+    #allPics img { width:80px; cursor:pointer; display:block; margin-bottom:10px; }
+    #gamePics img { width:150px; height:150px; object-fit:contain; cursor:pointer; margin-right:10px; }
+    button { padding:10px 20px; margin:5px; font-size:16px; cursor:pointer; }
   </style>
 </head>
 <body>
 
-  <h1>Гледай внимателно – Познай КОЛАТА!</h1>
+  <h1>Познай КОЛАТА!</h1>
+  <button id="start">СТАРТ</button>
+  <button id="reload" style="display:none">РЕЛОАД</button>
 
   <div id="container">
-    <!-- 1. Всички картинки в ляво -->
     <div id="allPics"></div>
-
-    <!-- 2. Център с произволни 3 -->
-    <div id="middle">
-      <div id="gamePics"></div>
-      <div id="controls">
-        <button id="start">СТАРТ</button><br>
-        <button id="reload">РЕЛОАД</button>
-      </div>
-    </div>
+    <div id="gamePics"></div>
   </div>
 
   <script>
-    const IMAGES = [
-      'bus.jpg',
-      'airplane.jpg',
-      'firetruck.jpg',
-      'train.jpg',
-      'truck.jpg'
-    ];
-    let selected = [];
-    let hiddenIndex = null;
-    let awaitingChoice = false;
+    const IMAGES = ['bus.jpg','airplane.jpg','firetruck.jpg','train.jpg','truck.jpg'];
+    let selected = [], hiddenIndex = null, awaiting = false;
 
     const allPicsEl = document.getElementById('allPics');
     const gamePicsEl = document.getElementById('gamePics');
     const startBtn = document.getElementById('start');
     const reloadBtn = document.getElementById('reload');
 
-    // 1. Покажи всички картинки в ляво
-    IMAGES.forEach(name => {
-      const img = document.createElement('img');
-      img.src = 'images/' + name;
-      img.dataset.name = name;
-      allPicsEl.appendChild(img);
-      img.addEventListener('click', chooseHandler);
-    });
+    // 1. При зареждане – показваме ВСИЧКИ картинки
+    function renderAllPics() {
+      allPicsEl.innerHTML = '';
+      IMAGES.forEach(name => {
+        const img = document.createElement('img');
+        img.src = 'images/' + name;
+        img.dataset.name = name;
+        img.addEventListener('click', chooseHandler);
+        allPicsEl.appendChild(img);
+      });
+    }
 
-    startBtn.addEventListener('click', () => {
-      // reset
-      reloadBtn.style.display = 'none';
+    // 2. При зареждането – избираме 3 централни картинки
+    function renderGamePics() {
       gamePicsEl.innerHTML = '';
-      awaitingChoice = false;
-
-      // избери 3 уникални
       selected = IMAGES.sort(() => 0.5 - Math.random()).slice(0,3);
-      hiddenIndex = null;
-
       selected.forEach((name, idx) => {
         const img = document.createElement('img');
         img.src = 'images/' + name;
-        img.dataset.index = idx;
+        img.dataset.idx = idx;
         gamePicsEl.appendChild(img);
       });
+    }
 
-      // скрий една след 0.5 сек
-      setTimeout(() => {
-        hiddenIndex = Math.floor(Math.random() * 3);
-        gamePicsEl.querySelectorAll('img')[hiddenIndex].style.visibility = 'hidden';
-        awaitingChoice = true;
-      }, 500);
+    // При зареждане на страницата:
+    renderAllPics();
+    renderGamePics();
+
+    // 3. При натискане на СТАРТ – скриваме една централна картинка
+    startBtn.addEventListener('click', () => {
+      if (awaiting) return;
+      hiddenIndex = Math.floor(Math.random() * 3);
+      gamePicsEl.querySelectorAll('img')[hiddenIndex].style.visibility = 'hidden';
+      awaiting = true;
     });
 
+    // 4. Детето избира картинка от колона
     function chooseHandler(e) {
-      if (!awaitingChoice) return;
-      const name = e.target.dataset.name;
-      const hiddenName = selected[hiddenIndex];
-
-      if (name === hiddenName) {
+      if (!awaiting) return;
+      const chosen = e.target.dataset.name;
+      const hidden = selected[hiddenIndex];
+      if (chosen === hidden) {
         alert('Браво, Уйли!');
-        awaitingChoice = false;
+        awaiting = false;
         reloadBtn.style.display = 'inline-block';
       } else {
         alert('Опитай пак!');
       }
     }
 
+    // 5. При натискане на РЕЛОАД – нов кръг
     reloadBtn.addEventListener('click', () => {
-      startBtn.click();
+      reloadBtn.style.display = 'none';
+      awaiting = false;
+      renderGamePics();
     });
   </script>
 
