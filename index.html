@@ -5,21 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Гледай внимателно – Познай КОЛАТА!</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; text-align: center; }
-    h1 { margin-bottom: 10px; }
-    #game { display: flex; justify-content: center; gap: 10px; margin-top: 20px; }
-    #game img { width: 200px; height: 200px; object-fit: contain; cursor: pointer; }
-    #start { padding: 10px 20px; font-size: 18px; }
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h1 { text-align: center; }
+    #container { display: flex; gap: 20px; }
+    #allPics { display: flex; flex-direction: column; gap: 10px; }
+    #allPics img { width: 100px; cursor: pointer; }
+    #middle { display: flex; flex-direction: column; align-items: center; flex-grow: 1; }
+    #gamePics { display: flex; gap: 10px; margin: 20px 0; }
+    #gamePics img { width: 180px; height: 180px; object-fit: contain; cursor: pointer; }
+    #controls { text-align: center; }
+    button { padding: 10px 20px; font-size: 18px; cursor: pointer; }
+    #reload { display: none; margin-top: 10px; }
   </style>
 </head>
 <body>
 
   <h1>Гледай внимателно – Познай КОЛАТА!</h1>
-  <button id="start">СТАРТ</button>
-  <div id="game"></div>
+
+  <div id="container">
+    <!-- 1. Всички картинки в ляво -->
+    <div id="allPics"></div>
+
+    <!-- 2. Център с произволни 3 -->
+    <div id="middle">
+      <div id="gamePics"></div>
+      <div id="controls">
+        <button id="start">СТАРТ</button><br>
+        <button id="reload">РЕЛОАД</button>
+      </div>
+    </div>
+  </div>
 
   <script>
-    const images = [
+    const IMAGES = [
       'bus.jpg',
       'airplane.jpg',
       'firetruck.jpg',
@@ -28,40 +46,64 @@
     ];
     let selected = [];
     let hiddenIndex = null;
+    let awaitingChoice = false;
 
-    document.getElementById('start').addEventListener('click', () => {
-      const game = document.getElementById('game');
-      game.innerHTML = '';
-      selected = images.sort(() => Math.random() - 0.5).slice(0, 3);
-      hiddenIndex = Math.floor(Math.random() * 3);
+    const allPicsEl = document.getElementById('allPics');
+    const gamePicsEl = document.getElementById('gamePics');
+    const startBtn = document.getElementById('start');
+    const reloadBtn = document.getElementById('reload');
 
-      selected.forEach((img, idx) => {
-        const imageElement = document.createElement('img');
-        imageElement.src = 'images/' + img;
-        imageElement.dataset.index = idx;
-        game.appendChild(imageElement);
-      });
-      // Скриване след 1 секунда
-      setTimeout(() => {
-        const imgToHide = game.querySelector(`img[data-index='${hiddenIndex}']`);
-        if (imgToHide) imgToHide.style.visibility = 'hidden';
-        game.querySelectorAll('img').forEach(img => {
-          img.addEventListener('click', selectHandler);
-        });
-      }, 1000);
+    // 1. Покажи всички картинки в ляво
+    IMAGES.forEach(name => {
+      const img = document.createElement('img');
+      img.src = 'images/' + name;
+      img.dataset.name = name;
+      allPicsEl.appendChild(img);
+      img.addEventListener('click', chooseHandler);
     });
 
-    function selectHandler(e) {
-      const idx = Number(e.target.dataset.index);
-      if (idx === hiddenIndex) {
+    startBtn.addEventListener('click', () => {
+      // reset
+      reloadBtn.style.display = 'none';
+      gamePicsEl.innerHTML = '';
+      awaitingChoice = false;
+
+      // избери 3 уникални
+      selected = IMAGES.sort(() => 0.5 - Math.random()).slice(0,3);
+      hiddenIndex = null;
+
+      selected.forEach((name, idx) => {
+        const img = document.createElement('img');
+        img.src = 'images/' + name;
+        img.dataset.index = idx;
+        gamePicsEl.appendChild(img);
+      });
+
+      // скрий една след 0.5 сек
+      setTimeout(() => {
+        hiddenIndex = Math.floor(Math.random() * 3);
+        gamePicsEl.querySelectorAll('img')[hiddenIndex].style.visibility = 'hidden';
+        awaitingChoice = true;
+      }, 500);
+    });
+
+    function chooseHandler(e) {
+      if (!awaitingChoice) return;
+      const name = e.target.dataset.name;
+      const hiddenName = selected[hiddenIndex];
+
+      if (name === hiddenName) {
         alert('Браво, Уйли!');
+        awaitingChoice = false;
+        reloadBtn.style.display = 'inline-block';
       } else {
         alert('Опитай пак!');
       }
-      document.getElementById('game').querySelectorAll('img').forEach(img => {
-        img.removeEventListener('click', selectHandler);
-      });
     }
+
+    reloadBtn.addEventListener('click', () => {
+      startBtn.click();
+    });
   </script>
 
 </body>
