@@ -10,14 +10,15 @@
       margin: 20px;
       text-align: center;
     }
+    #controls {
+      margin-bottom: 20px;
+    }
     #container {
       display: flex;
-      justify-content: flex-start;
-      align-items: start;
       gap: 30px;
-      margin-top: 20px;
     }
     #allPics {
+      flex: 0 0 230px;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -31,11 +32,11 @@
       margin-bottom: 10px;
     }
     #gamePics {
+      flex: 1;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-width: 700px;
-      height: 220px;
+      min-height: 220px;
     }
     #gamePics img {
       width: 220px;
@@ -55,8 +56,10 @@
 <body>
 
   <h1>Познай КОЛАТА!</h1>
-  <button id="start">СТАРТ</button>
-  <button id="reload" style="display:none">РЕЛОАД</button>
+  <div id="controls">
+    <button id="start">СТАРТ</button>
+    <button id="reload" style="display:none">РЕЛОАД</button>
+  </div>
 
   <div id="container">
     <div id="allPics"></div>
@@ -111,7 +114,7 @@
       if (chosen === hidden) {
         alert('Браво, Уйли!');
         awaiting = false;
-        reloadBtn.style.display = 'inline';
+        reloadBtn.style.display = 'inline-block';
       } else {
         alert('Опитай пак!');
       }
