@@ -74,6 +74,22 @@
   <label><input type="radio" name="count" value="5"> 5</label>
 </div>
 
+<script>
+  const themeRadios = document.querySelectorAll('input[name="theme"]');
+  const countRadios = document.querySelectorAll('input[name="count"]');
+  const startButton = document.getElementById('startGameBtn');
+
+  function checkSelections() {
+    const themeSelected = Array.from(themeRadios).some(r => r.checked);
+    const countSelected = Array.from(countRadios).some(r => r.checked);
+
+    startButton.disabled = !(themeSelected && countSelected);
+  }
+
+  themeRadios.forEach(r => r.addEventListener('change', checkSelections));
+  countRadios.forEach(r => r.addEventListener('change', checkSelections));
+</script>
+  
 <!-- 🎯 БУТОН ЗА СТАРТ -->
 <button id="startGameBtn" disabled>Започни играта</button>
   
