@@ -7,34 +7,48 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin:20px;
-      text-align:center;
+      margin: 20px;
+      text-align: center;
     }
     #container {
       display: flex;
       justify-content: flex-start;
-      gap:30px;
-      margin-top:20px;
+      align-items: start;
+      gap: 30px;
+      margin-top: 20px;
     }
-    #allPics, #gamePics {
+    #allPics {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       min-width: 230px;
     }
-    #allPics img,
-    #gamePics img {
+    #allPics img {
       width: 220px;
       height: 220px;
       object-fit: contain;
       cursor: pointer;
       margin-bottom: 10px;
     }
+    #gamePics {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-width: 700px;
+      height: 220px;
+    }
+    #gamePics img {
+      width: 220px;
+      height: 220px;
+      object-fit: contain;
+      cursor: pointer;
+      margin: 0 10px;
+    }
     button {
-      padding:10px 20px;
-      margin:5px;
-      font-size:16px;
-      cursor:pointer;
+      padding: 10px 20px;
+      margin: 5px;
+      font-size: 16px;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -80,7 +94,6 @@
       });
     }
 
-    // Начално зареждане
     renderAllPics();
     renderGamePics();
 
