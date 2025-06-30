@@ -36,26 +36,28 @@ button:disabled {
   cursor: not-allowed;
 }
 
-/* 🖼️ Основен контейнер */
+/* 🎮 Игрова зона */
 #container {
   display: flex;
-  gap: 30px;
-  justify-content: center;
-  align-items: flex-start;
-  flex-wrap: wrap;
-}
-
-/* 🎨 Панел със всички картинки */
-#allPics {
-  display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  min-width: 230px;
-  gap: 10px;
+  align-items: center;
+  gap: 20px;
 }
 
-#allPics img,
+/* 🧩 Игрови картинки – основни */
+#gamePics {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+  min-height: 220px;
+}
+
 #gamePics img {
+  width: 220px;
+  height: 220px;
   object-fit: contain;
   object-position: center;
   cursor: pointer;
@@ -64,33 +66,34 @@ button:disabled {
   transition: transform 0.2s ease;
 }
 
-#gamePics img {
-  width: 220px;
-  height: 220px;
-}
-
-#allPics img {
-  width: 146px;
-  height: 146px;
-}
-
-#allPics img:hover,
 #gamePics img:hover {
   transform: scale(1.05);
 }
 
-/* 📷 Игрови картинки */
-#gamePics {
-  flex: 1;
+/* 🖼️ Панел със всички картинки */
+#allPics {
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-wrap: wrap;
-  min-height: 220px;
+  justify-content: center;
   gap: 10px;
 }
 
-/* 📻 Радио бутони */
+#allPics img {
+  width: 146px; /* 2/3 от 220 */
+  height: 146px;
+  object-fit: contain;
+  object-position: center;
+  cursor: pointer;
+  border: 2px solid #555;
+  border-radius: 10px;
+  transition: transform 0.2s ease;
+}
+
+#allPics img:hover {
+  transform: scale(1.05);
+}
+
+/* 🎛️ Радио бутони */
 #themeOptions, #countOptions {
   margin: 1rem auto;
   font-size: 1rem;
@@ -98,10 +101,14 @@ button:disabled {
 
 /* 📱 Адаптация за таблети */
 @media (max-width: 768px) {
-  #allPics img,
   #gamePics img {
-    width: 140px;
-    height: 140px;
+    width: 180px;
+    height: 180px;
+  }
+
+  #allPics img {
+    width: 120px;
+    height: 120px;
   }
 
   button {
@@ -114,25 +121,20 @@ button:disabled {
   }
 }
 
-/* 📱 Адаптация за мобилни телефони */
+/* 📱 Адаптация за телефони */
 @media (max-width: 480px) {
-  #container {
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-  }
-
-  #allPics {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    min-width: auto;
-  }
-
-  #allPics img,
   #gamePics img {
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
+  }
+
+  #allPics img {
+    width: 90px;
+    height: 90px;
+  }
+
+  #container {
+    gap: 15px;
   }
 
   h1 {
