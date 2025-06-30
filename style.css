@@ -56,14 +56,22 @@ button:disabled {
 
 #allPics img,
 #gamePics img {
-  width: 220px;
-  height: 220px;
   object-fit: contain;
   object-position: center;
   cursor: pointer;
   border: 2px solid #555;
   border-radius: 10px;
   transition: transform 0.2s ease;
+}
+
+#gamePics img {
+  width: 220px;
+  height: 220px;
+}
+
+#allPics img {
+  width: 146px;
+  height: 146px;
 }
 
 #allPics img:hover,
