@@ -44,14 +44,15 @@ button:disabled {
   gap: 20px;
 }
 
-/* 🧩 Игрови картинки – основни */
+/* 🎮 Игрови картинки – горе */
 #gamePics {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 20px; /* разстояние между картинките */
   margin-top: 10px;
+  margin-bottom: 30px; /* отстояние от #allPics */
   min-height: 220px;
 }
 
@@ -70,12 +71,15 @@ button:disabled {
   transform: scale(1.05);
 }
 
-/* 🖼️ Панел със всички картинки */
+/* 🖼️ Странични (всички) картинки – отдолу */
 #allPics {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
+  margin-bottom: 40px;
+  border-top: 2px dashed #ccc;
+  padding-top: 20px;
 }
 
 #allPics img {
@@ -92,6 +96,7 @@ button:disabled {
 #allPics img:hover {
   transform: scale(1.05);
 }
+
 
 /* 🎛️ Радио бутони */
 #themeOptions, #countOptions {
