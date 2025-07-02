@@ -88,6 +88,8 @@ document.addEventListener('DOMContentLoaded', () => {
         startBtn.disabled = false;
     }
 
+    // script.js (само актуализираната функция hideRandomPicture)
+
     // Функция за скриване на произволна картинка
     function hideRandomPicture() {
         if (awaitingChoice) return;
@@ -97,20 +99,31 @@ document.addEventListener('DOMContentLoaded', () => {
         hiddenIndex = Math.floor(Math.random() * numberOfPics);
         hiddenImageElement = gamePicsEl.querySelectorAll('img')[hiddenIndex];
 
-        // Създаване на празното квадратче (placeholder)
+        // 1. Създаване на празното квадратче (placeholder)
         placeholderElement = document.createElement('div');
         placeholderElement.classList.add('hidden-placeholder');
         
-        // Заместваме картинката с placeholder-а
-        gamePicsEl.replaceChild(placeholderElement, hiddenImageElement);
+        // 2. Временно скриване на картинката преди да я заменим
+        hiddenImageElement.style.opacity = '0'; 
+        hiddenImageElement.style.visibility = 'hidden';
 
-        // Добавяме класа за скриване на картинката (тя вече е извън DOM потока)
-        hiddenImageElement.classList.add('is-hidden'); 
+        // 3. Заместваме картинката с placeholder-а
+        // Използваме setTimeout, за да дадем време на браузъра да приложи opacity/visibility
+        // преди да премахнем елемента от DOM потока.
+        setTimeout(() => {
+            if (hiddenImageElement && hiddenImageElement.parentNode) { // Проверка дали елементът все още е в DOM
+                gamePicsEl.replaceChild(placeholderElement, hiddenImageElement);
+                // Картинката вече е извън DOM потока, така че не е нужно да добавяме is-hidden клас тук за нея.
+                // Тя ще се появи отново, когато бъде върната.
+            }
+        }, 50); // Малко закъснение
 
         awaitingChoice = true;
         startBtn.classList.add('hidden');
         showMessage('Познай кое липсва!', 'info');
     }
+
+// ... останалата част от script.js остава непроменена
 
     // Обработка на избора на играча от долните картинки
     function chooseHandler(e) {
