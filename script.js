@@ -98,19 +98,27 @@ document.addEventListener('DOMContentLoaded', () => {
         // 1. Създаване на празното квадратче (placeholder)
         placeholderElement = document.createElement('div');
         placeholderElement.classList.add('hidden-placeholder');
-        // Задаваме му същите размери като img, за да запази мястото
-        placeholderElement.style.width = hiddenImageElement.offsetWidth + 'px';
-        placeholderElement.style.height = hiddenImageElement.offsetHeight + 'px';
+        // Размерите му ще дойдат от CSS
 
         // 2. Вмъкване на placeholder-а на мястото на картинката
         gamePicsEl.replaceChild(placeholderElement, hiddenImageElement);
 
-        // 3. Позициониране на скритата картинка абсолютно (извън потока) и добавяне на клас за скриване
-        hiddenImageElement.classList.add('is-hidden'); // Прилага opacity: 0
-        hiddenImageElement.style.position = 'absolute';
-        hiddenImageElement.style.left = placeholderElement.offsetLeft + 'px';
-        hiddenImageElement.style.top = placeholderElement.offsetTop + 'px';
-        gamePicsEl.appendChild(hiddenImageElement); // Преместване в края на gamePics, за да не влияе на flexbox
+        // 3. Изчисляване на разстоянието до центъра на gamePics (или удобно извън екрана)
+        // За да се движи от allPics към placeholder-а
+        // Нека я скрием извън екрана, преди да я анимираме обратно
+        // Можем да използваме позиция спрямо allPics за по-реалистично "влизане"
+        const allPicsRect = allPicsEl.getBoundingClientRect();
+        const hiddenImgRect = hiddenImageElement.getBoundingClientRect(); // Текущата позиция на скритата картинка
+
+        // Изчисляване на преместване от текущата позиция до извън gamePics
+        // Например, на 2 пъти височината на екрана над gamePics
+        const moveY = -(hiddenImgRect.top + hiddenImgRect.height + window.innerHeight * 0.5); // Пример за преместване нагоре извън екрана
+        const moveX = 0; // Или някаква случайна X позиция за по-интересен ефект
+
+        hiddenImageElement.style.setProperty('--move-x', `${moveX}px`);
+        hiddenImageElement.style.setProperty('--move-y', `${moveY}px`);
+        
+        hiddenImageElement.classList.add('is-hidden'); // Прилага opacity: 0 и transform
 
         awaitingChoice = true;
         startBtn.classList.add('hidden');
@@ -127,28 +135,25 @@ document.addEventListener('DOMContentLoaded', () => {
         if (chosen === hidden) {
             showMessage('Браво, Уйли!', 'success');
 
-            // 1. Преместваме скритата картинка обратно към позицията на placeholder-а
             if (hiddenImageElement && placeholderElement) {
-                const rect = placeholderElement.getBoundingClientRect();
-                const gamePicsRect = gamePicsEl.getBoundingClientRect();
+                // Премахваме класа за скриване, за да започне анимацията
+                hiddenImageElement.classList.remove('is-hidden');
 
-                // Позиционираме img спрямо gamePics контейнера
-                hiddenImageElement.style.left = (rect.left - gamePicsRect.left) + 'px';
-                hiddenImageElement.style.top = (rect.top - gamePicsRect.top) + 'px';
-
-                // Добавяме transition за плавно движение
-                hiddenImageElement.style.transition = 'left 0.5s ease-out, top 0.5s ease-out, opacity 0.5s ease-out';
-                hiddenImageElement.classList.remove('is-hidden'); // Правим я видима
-
-                // След като анимацията приключи, връщаме картинката в нормалния поток
+                // Слушаме края на анимацията
                 hiddenImageElement.addEventListener('transitionend', function handler() {
                     hiddenImageElement.removeEventListener('transitionend', handler);
-                    if (placeholderElement && hiddenImageElement.parentNode === gamePicsEl) {
-                         // Връщаме картинката на мястото на placeholder-а в DOM
+                    
+                    // След като анимацията приключи, връщаме картинката на мястото на placeholder-а в DOM
+                    if (placeholderElement && placeholderElement.parentNode === gamePicsEl) {
                         gamePicsEl.replaceChild(hiddenImageElement, placeholderElement);
-                        hiddenImageElement.style.position = 'static'; // Връщаме към нормален поток
-                        hiddenImageElement.style.transition = ''; // Премахваме transition за бъдещи нормални ховър ефекти
                     }
+                    // Нулираме всички трансформации и преходи, за да не пречат на нормалните ховър ефекти
+                    hiddenImageElement.style.transform = '';
+                    hiddenImageElement.style.transition = '';
+                    hiddenImageElement.style.setProperty('--move-x', '0px');
+                    hiddenImageElement.style.setProperty('--move-y', '0px');
+
+
                     placeholderElement = null; // Изчистваме референцията
                     reloadBtn.classList.remove('hidden');
                     startBtn.classList.add('hidden');
@@ -175,19 +180,21 @@ document.addEventListener('DOMContentLoaded', () => {
     function resetGameState() {
         awaitingChoice = false;
         hiddenIndex = null;
-        hiddenImageElement = null;
-        if (placeholderElement && placeholderElement.parentNode) {
-            placeholderElement.parentNode.removeChild(placeholderElement); // Премахваме placeholder-а
-        }
-        placeholderElement = null;
-        showMessage('Натисни "СКРИЙ КАРТИНА" за да започнеш.', 'info');
         
-        // Показване на всички картинки, ако случайно са скрити от предишна игра
+        // Връщаме всички картинки, които може да са били скрити, в изходно положение
         gamePicsEl.querySelectorAll('img').forEach(img => {
-            img.classList.remove('is-hidden'); // Използваме клас
-            img.style.position = 'static'; // Връщаме всички към static
-            img.style.transition = ''; // Премахваме transition
+            img.classList.remove('is-hidden');
+            img.style.transform = ''; // Нулираме трансформациите
+            img.style.transition = ''; // Нулираме преходите
         });
+
+        // Ако има placeholder, премахваме го
+        if (placeholderElement && placeholderElement.parentNode) {
+            placeholderElement.parentNode.removeChild(placeholderElement);
+        }
+        placeholderElement = null; // Ресетваме и референцията
+
+        showMessage('Натисни "СКРИЙ КАРТИНА" за да започнеш.', 'info');
         
         reloadBtn.classList.add('hidden');
         startBtn.classList.remove('hidden');
@@ -206,7 +213,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- Първоначална инициализация при зареждане на страницата ---
-    updateStartButtonState();
+    // 🚩 РЕШЕНИЕ НА ПРОБЛЕМ 1: Извикваме функцията при зареждане, за да провери първоначалното състояние
+    updateStartButtonState(); 
+
     document.getElementById('controls').classList.add('hidden');
     containerEl.classList.add('hidden');
 });
