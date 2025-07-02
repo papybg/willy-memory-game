@@ -2,7 +2,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     // 🎯 Дефиниции на темите и техните изображения
     const ALL_THEMES = {
-        cars: ['bus.jpg', 'airplane.jpg', 'firetruck.jpg', 'train.jpg', 'truck.jpg'],
+        // Променено от 'cars' на 'превозни_средства'
+        превозни_средства: ['bus.jpg', 'airplane.jpg', 'firetruck.jpg', 'train.jpg', 'truck.jpg'],
         animals: ['dog.jpg', 'cat.jpg', 'lion.jpg', 'elephant.jpg', 'monkey.jpg'], // Примерни изображения за животни
         flowers: ['rose.jpg', 'tulip.jpg', 'lily.jpg', 'daisy.jpg', 'sunflower.jpg'] // Примерни изображения за цветя
     };
@@ -46,7 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
         currentThemeImages = ALL_THEMES[selectedTheme];
 
         // 📝 Динамично обновяване на заглавието и показване на съобщение
-        gameTitleEl.textContent = `Познай ${selectedTheme.toUpperCase()}!`;
+        // selectedTheme.replace('_', ' ') ще замени долното тире с интервал
+        gameTitleEl.textContent = `Познай ${selectedTheme.replace('_', ' ').toUpperCase()}!`;
         showMessage('Натисни "СКРИЙ КАРТИНА" за да започнеш.', 'info'); // Използваме showMessage
 
         // 📝 Скриване на опциите и показване на игралното поле
@@ -104,7 +106,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         awaitingChoice = true; // Играчът трябва да направи избор
         startBtn.classList.add('hidden'); // Скриване на бутона "СКРИЙ КАРТИНА" след като картинката е скрита
-        showMessage('Коя картинка липсва? Избери от долните!', 'info');
+        // Променено съобщение
+        showMessage('Познай кое липсва!', 'info');
     }
 
     // Обработка на избора на играча от долните картинки
