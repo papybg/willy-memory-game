@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const optionsContainer = document.getElementById('optionsContainer'); // Общ контейнер за опциите
 
     const gameTitleEl = document.getElementById('gameTitle');
-    const messageDisplay = document.getElementById('gameMessage');
+    const messageDisplay = document.getElementById('gameMessage'); // Сега вече с id="gameMessage"
     const startBtn = document.getElementById('start');
     const reloadBtn = document.getElementById('reload');
     const allPicsEl = document.getElementById('allPics');
@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentThemeImages = [];
     let numberOfPics = 0; // Брой картинки за играта (от избора на потребителя)
     let selectedGamePics = []; // Картинките, избрани за горната редица
+    let hiddenImageElement = null; // Референция към скрития img елемент
     let hiddenIndex = null; // Индекс на скритата картинка
     let awaitingChoice = false; // Флаг, указващ дали играчът трябва да избере картинка
 
@@ -46,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 📝 Динамично обновяване на заглавието и показване на съобщение
         gameTitleEl.textContent = `Познай ${selectedTheme.toUpperCase()}!`;
-        messageDisplay.textContent = 'Натисни "СКРИЙ КАРТИНА" за да започнеш.';
+        showMessage('Натисни "СКРИЙ КАРТИНА" за да започнеш.', 'info'); // Използваме showMessage
 
         // 📝 Скриване на опциите и показване на игралното поле
         optionsContainer.classList.add('hidden'); // Скриваме целия контейнер с опциите
@@ -77,7 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderGamePics() {
         gamePicsEl.innerHTML = '';
         // Разбъркване и избор на `numberOfPics` на брой картинки от текущата тема
-        // Използваме Fisher-Yates shuffle за по-добро разбъркване
         const shuffledImages = [...currentThemeImages].sort(() => 0.5 - Math.random());
         selectedGamePics = shuffledImages.slice(0, numberOfPics);
 
@@ -99,10 +99,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (awaitingChoice) return; // Ако вече се чака избор, не прави нищо
 
         hiddenIndex = Math.floor(Math.random() * numberOfPics);
-        gamePicsEl.querySelectorAll('img')[hiddenIndex].style.visibility = 'hidden';
+        hiddenImageElement = gamePicsEl.querySelectorAll('img')[hiddenIndex]; // Записваме референция
+        hiddenImageElement.classList.add('hidden-picture'); // Добавяме клас за плавно скриване
+
         awaitingChoice = true; // Играчът трябва да направи избор
         startBtn.classList.add('hidden'); // Скриване на бутона "СКРИЙ КАРТИНА" след като картинката е скрита
-        messageDisplay.textContent = 'Коя картинка липсва? Избери от долните!';
+        showMessage('Коя картинка липсва? Избери от долните!', 'info');
     }
 
     // Обработка на избора на играча от долните картинки
@@ -113,23 +115,47 @@ document.addEventListener('DOMContentLoaded', () => {
         const hidden = selectedGamePics[hiddenIndex];
 
         if (chosen === hidden) {
-            messageDisplay.textContent = 'Браво, Уйли!';
-            gamePicsEl.querySelectorAll('img')[hiddenIndex].style.visibility = 'visible'; // Показване на скритата картинка
+            showMessage('Браво, Уйли!', 'success'); // Съобщение за успех
+            // Плавно връщане на скритата картинка
+            if (hiddenImageElement) {
+                hiddenImageElement.classList.remove('hidden-picture'); // Премахваме класа
+                // Може да добавите и кратък setTimeout преди reloadBtn.classList.remove('hidden');
+                // за да се види анимацията преди бутонът да се появи.
+            }
             awaitingChoice = false;
             reloadBtn.classList.remove('hidden'); // Показване на бутона "НОВА ИГРА"
             startBtn.classList.add('hidden'); // Уверете се, че СТАРТ е скрит
         } else {
-            messageDisplay.textContent = 'Опитай пак!';
+            showMessage('Опитай пак!', 'error'); // Съобщение за грешка
         }
+    }
+
+    // Нова функция за показване на анимирани съобщения
+    function showMessage(text, type) {
+        // Изчистване на стари класове и анимации
+        messageDisplay.classList.remove('message-animate', 'message-success', 'message-error');
+        messageDisplay.style.opacity = 0; // Ресетване на opacity за ре-анимация
+        messageDisplay.style.transform = 'scale(0.8)'; // Ресетване на scale
+
+        messageDisplay.textContent = text;
+        
+        // Добавяне на клас за тип съобщение и стартиране на анимация
+        // Използваме setTimeout за да дадем време на браузъра да регистрира ресета
+        setTimeout(() => {
+            messageDisplay.classList.add('message-animate', `message-${type}`);
+        }, 50); // Малко закъснение
     }
 
     // Функция за ресетване на състоянието на играта
     function resetGameState() {
         awaitingChoice = false;
         hiddenIndex = null;
-        messageDisplay.textContent = 'Натисни "СКРИЙ КАРТИНА" за да започнеш.';
+        hiddenImageElement = null; // Ресетваме и референцията
+        showMessage('Натисни "СКРИЙ КАРТИНА" за да започнеш.', 'info'); // Ресет съобщение
+        
         // Показване на всички картинки, ако случайно са скрити от предишна игра
-        gamePicsEl.querySelectorAll('img').forEach(img => img.style.visibility = 'visible');
+        gamePicsEl.querySelectorAll('img').forEach(img => img.classList.remove('hidden-picture')); // Използваме клас
+        
         reloadBtn.classList.add('hidden');
         startBtn.classList.remove('hidden');
         startBtn.disabled = false;
@@ -141,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
     startGameBtn.addEventListener('click', startGame);
     startBtn.addEventListener('click', hideRandomPicture);
     reloadBtn.addEventListener('click', () => {
-        messageDisplay.textContent = ''; // Изчистване на съобщението
+        showMessage('', 'info'); // Изчистване на съобщението
         renderGamePics(); // Рестарт на играта с текущата тема и брой
         resetGameState(); // Ресетване на състоянието за нова игра
     });
