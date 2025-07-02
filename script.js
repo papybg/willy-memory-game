@@ -2,84 +2,76 @@
 document.addEventListener('DOMContentLoaded', () => {
     // 🎯 Дефиниции на темите и техните изображения
     const ALL_THEMES = {
-        // Променено от 'cars' на 'превозни_средства'
         превозни_средства: ['bus.jpg', 'airplane.jpg', 'firetruck.jpg', 'train.jpg', 'truck.jpg'],
-        animals: ['dog.jpg', 'cat.jpg', 'lion.jpg', 'elephant.jpg', 'monkey.jpg'], // Примерни изображения за животни
-        flowers: ['rose.jpg', 'tulip.jpg', 'lily.jpg', 'daisy.jpg', 'sunflower.jpg'] // Примерни изображения за цветя
+        animals: ['dog.jpg', 'cat.jpg', 'lion.jpg', 'elephant.jpg', 'monkey.jpg'],
+        flowers: ['rose.jpg', 'tulip.jpg', 'lily.jpg', 'daisy.jpg', 'sunflower.jpg']
     };
 
     // 🎯 DOM елементи
     const themeRadios = document.querySelectorAll('input[name="theme"]');
     const countRadios = document.querySelectorAll('input[name="count"]');
     const startGameBtn = document.getElementById('startGameBtn');
-    const optionsContainer = document.getElementById('optionsContainer'); // Общ контейнер за опциите
+    const optionsContainer = document.getElementById('optionsContainer');
 
     const gameTitleEl = document.getElementById('gameTitle');
-    const messageDisplay = document.getElementById('gameMessage'); // Сега вече с id="gameMessage"
+    const messageDisplay = document.getElementById('gameMessage');
     const startBtn = document.getElementById('start');
     const reloadBtn = document.getElementById('reload');
     const allPicsEl = document.getElementById('allPics');
     const gamePicsEl = document.getElementById('gamePics');
-    const containerEl = document.getElementById('container'); // Игрово поле
+    const containerEl = document.getElementById('container');
 
     // 🎯 Променливи за състоянието на играта
     let currentThemeImages = [];
-    let numberOfPics = 0; // Брой картинки за играта (от избора на потребителя)
-    let selectedGamePics = []; // Картинките, избрани за горната редица
+    let numberOfPics = 0;
+    let selectedGamePics = [];
     let hiddenImageElement = null; // Референция към скрития img елемент
-    let hiddenIndex = null; // Индекс на скритата картинка
-    let awaitingChoice = false; // Флаг, указващ дали играчът трябва да избере картинка
+    let hiddenIndex = null;
+    let awaitingChoice = false;
+    let placeholderElement = null; // Референция към празно квадратче
 
     // --- Функции ---
 
-    // Функция за актуализиране на състоянието на бутона "Започни играта"
     function updateStartButtonState() {
         const themeSelected = Array.from(themeRadios).some(r => r.checked);
         const countSelected = Array.from(countRadios).some(r => r.checked);
         startGameBtn.disabled = !(themeSelected && countSelected);
     }
 
-    // Функция за стартиране на играта след избор на опции
     function startGame() {
         const selectedTheme = document.querySelector('input[name="theme"]:checked').value;
         numberOfPics = parseInt(document.querySelector('input[name="count"]:checked').value);
 
         currentThemeImages = ALL_THEMES[selectedTheme];
 
-        // 📝 Динамично обновяване на заглавието и показване на съобщение
-        // selectedTheme.replace('_', ' ') ще замени долното тире с интервал
         gameTitleEl.textContent = `Познай ${selectedTheme.replace('_', ' ').toUpperCase()}!`;
-        showMessage('Натисни "СКРИЙ КАРТИНА" за да започнеш.', 'info'); // Използваме showMessage
+        showMessage('Натисни "СКРИЙ КАРТИНА" за да започнеш.', 'info');
 
-        // 📝 Скриване на опциите и показване на игралното поле
-        optionsContainer.classList.add('hidden'); // Скриваме целия контейнер с опциите
-        startGameBtn.classList.add('hidden'); // Скриваме и бутона
+        optionsContainer.classList.add('hidden');
+        startGameBtn.classList.add('hidden');
 
-        document.getElementById('controls').classList.remove('hidden'); // Показваме контролите (СТАРТ/РЕЛОАД)
-        containerEl.classList.remove('hidden'); // Показваме игровото поле
+        document.getElementById('controls').classList.remove('hidden');
+        containerEl.classList.remove('hidden');
 
-        renderGamePics(); // Рендираме горните картинки за играта
-        renderAllPics();  // Рендираме долните картинки за избор
-        resetGameState(); // Ресетваме състоянието на играта
+        renderGamePics();
+        renderAllPics();
+        resetGameState();
     }
 
-    // Функция за рендиране на всички картинки (долната редица за избор)
     function renderAllPics() {
         allPicsEl.innerHTML = '';
         currentThemeImages.forEach(name => {
             const img = document.createElement('img');
             img.src = 'images/' + name;
             img.dataset.name = name;
-            img.alt = name.replace('.jpg', ''); // Алтернативен текст за достъпност
+            img.alt = name.replace('.jpg', '');
             img.addEventListener('click', chooseHandler);
             allPicsEl.appendChild(img);
         });
     }
 
-    // Функция за рендиране на картинките за игра (горната редица)
     function renderGamePics() {
         gamePicsEl.innerHTML = '';
-        // Разбъркване и избор на `numberOfPics` на брой картинки от текущата тема
         const shuffledImages = [...currentThemeImages].sort(() => 0.5 - Math.random());
         selectedGamePics = shuffledImages.slice(0, numberOfPics);
 
@@ -91,73 +83,111 @@ document.addEventListener('DOMContentLoaded', () => {
             gamePicsEl.appendChild(img);
         });
 
-        reloadBtn.classList.add('hidden'); // Скриване на бутона "НОВА ИГРА" при ново зареждане
-        startBtn.classList.remove('hidden'); // Показване на бутона "СКРИЙ КАРТИНА"
-        startBtn.disabled = false; // Активиране на бутон "СКРИЙ КАРТИНА"
+        reloadBtn.classList.add('hidden');
+        startBtn.classList.remove('hidden');
+        startBtn.disabled = false;
     }
 
     // Функция за скриване на произволна картинка
     function hideRandomPicture() {
-        if (awaitingChoice) return; // Ако вече се чака избор, не прави нищо
+        if (awaitingChoice) return;
 
         hiddenIndex = Math.floor(Math.random() * numberOfPics);
-        hiddenImageElement = gamePicsEl.querySelectorAll('img')[hiddenIndex]; // Записваме референция
-        hiddenImageElement.classList.add('hidden-picture'); // Добавяме клас за плавно скриване
+        hiddenImageElement = gamePicsEl.querySelectorAll('img')[hiddenIndex];
 
-        awaitingChoice = true; // Играчът трябва да направи избор
-        startBtn.classList.add('hidden'); // Скриване на бутона "СКРИЙ КАРТИНА" след като картинката е скрита
-        // Променено съобщение
+        // 1. Създаване на празното квадратче (placeholder)
+        placeholderElement = document.createElement('div');
+        placeholderElement.classList.add('hidden-placeholder');
+        // Задаваме му същите размери като img, за да запази мястото
+        placeholderElement.style.width = hiddenImageElement.offsetWidth + 'px';
+        placeholderElement.style.height = hiddenImageElement.offsetHeight + 'px';
+
+        // 2. Вмъкване на placeholder-а на мястото на картинката
+        gamePicsEl.replaceChild(placeholderElement, hiddenImageElement);
+
+        // 3. Позициониране на скритата картинка абсолютно (извън потока) и добавяне на клас за скриване
+        hiddenImageElement.classList.add('is-hidden'); // Прилага opacity: 0
+        hiddenImageElement.style.position = 'absolute';
+        hiddenImageElement.style.left = placeholderElement.offsetLeft + 'px';
+        hiddenImageElement.style.top = placeholderElement.offsetTop + 'px';
+        gamePicsEl.appendChild(hiddenImageElement); // Преместване в края на gamePics, за да не влияе на flexbox
+
+        awaitingChoice = true;
+        startBtn.classList.add('hidden');
         showMessage('Познай кое липсва!', 'info');
     }
 
     // Обработка на избора на играча от долните картинки
     function chooseHandler(e) {
-        if (!awaitingChoice) return; // Ако не се чака избор, не прави нищо
+        if (!awaitingChoice) return;
 
         const chosen = e.target.dataset.name;
         const hidden = selectedGamePics[hiddenIndex];
 
         if (chosen === hidden) {
-            showMessage('Браво, Уйли!', 'success'); // Съобщение за успех
-            // Плавно връщане на скритата картинка
-            if (hiddenImageElement) {
-                hiddenImageElement.classList.remove('hidden-picture'); // Премахваме класа
-                // Може да добавите и кратък setTimeout преди reloadBtn.classList.remove('hidden');
-                // за да се види анимацията преди бутонът да се появи.
+            showMessage('Браво, Уйли!', 'success');
+
+            // 1. Преместваме скритата картинка обратно към позицията на placeholder-а
+            if (hiddenImageElement && placeholderElement) {
+                const rect = placeholderElement.getBoundingClientRect();
+                const gamePicsRect = gamePicsEl.getBoundingClientRect();
+
+                // Позиционираме img спрямо gamePics контейнера
+                hiddenImageElement.style.left = (rect.left - gamePicsRect.left) + 'px';
+                hiddenImageElement.style.top = (rect.top - gamePicsRect.top) + 'px';
+
+                // Добавяме transition за плавно движение
+                hiddenImageElement.style.transition = 'left 0.5s ease-out, top 0.5s ease-out, opacity 0.5s ease-out';
+                hiddenImageElement.classList.remove('is-hidden'); // Правим я видима
+
+                // След като анимацията приключи, връщаме картинката в нормалния поток
+                hiddenImageElement.addEventListener('transitionend', function handler() {
+                    hiddenImageElement.removeEventListener('transitionend', handler);
+                    if (placeholderElement && hiddenImageElement.parentNode === gamePicsEl) {
+                         // Връщаме картинката на мястото на placeholder-а в DOM
+                        gamePicsEl.replaceChild(hiddenImageElement, placeholderElement);
+                        hiddenImageElement.style.position = 'static'; // Връщаме към нормален поток
+                        hiddenImageElement.style.transition = ''; // Премахваме transition за бъдещи нормални ховър ефекти
+                    }
+                    placeholderElement = null; // Изчистваме референцията
+                    reloadBtn.classList.remove('hidden');
+                    startBtn.classList.add('hidden');
+                });
             }
             awaitingChoice = false;
-            reloadBtn.classList.remove('hidden'); // Показване на бутона "НОВА ИГРА"
-            startBtn.classList.add('hidden'); // Уверете се, че СТАРТ е скрит
         } else {
-            showMessage('Опитай пак!', 'error'); // Съобщение за грешка
+            showMessage('Опитай пак!', 'error');
         }
     }
 
-    // Нова функция за показване на анимирани съобщения
     function showMessage(text, type) {
-        // Изчистване на стари класове и анимации
         messageDisplay.classList.remove('message-animate', 'message-success', 'message-error');
-        messageDisplay.style.opacity = 0; // Ресетване на opacity за ре-анимация
-        messageDisplay.style.transform = 'scale(0.8)'; // Ресетване на scale
+        messageDisplay.style.opacity = 0;
+        messageDisplay.style.transform = 'scale(0.8)';
 
         messageDisplay.textContent = text;
         
-        // Добавяне на клас за тип съобщение и стартиране на анимация
-        // Използваме setTimeout за да дадем време на браузъра да регистрира ресета
         setTimeout(() => {
             messageDisplay.classList.add('message-animate', `message-${type}`);
-        }, 50); // Малко закъснение
+        }, 50);
     }
 
-    // Функция за ресетване на състоянието на играта
     function resetGameState() {
         awaitingChoice = false;
         hiddenIndex = null;
-        hiddenImageElement = null; // Ресетваме и референцията
-        showMessage('Натисни "СКРИЙ КАРТИНА" за да започнеш.', 'info'); // Ресет съобщение
+        hiddenImageElement = null;
+        if (placeholderElement && placeholderElement.parentNode) {
+            placeholderElement.parentNode.removeChild(placeholderElement); // Премахваме placeholder-а
+        }
+        placeholderElement = null;
+        showMessage('Натисни "СКРИЙ КАРТИНА" за да започнеш.', 'info');
         
         // Показване на всички картинки, ако случайно са скрити от предишна игра
-        gamePicsEl.querySelectorAll('img').forEach(img => img.classList.remove('hidden-picture')); // Използваме клас
+        gamePicsEl.querySelectorAll('img').forEach(img => {
+            img.classList.remove('is-hidden'); // Използваме клас
+            img.style.position = 'static'; // Връщаме всички към static
+            img.style.transition = ''; // Премахваме transition
+        });
         
         reloadBtn.classList.add('hidden');
         startBtn.classList.remove('hidden');
@@ -170,14 +200,13 @@ document.addEventListener('DOMContentLoaded', () => {
     startGameBtn.addEventListener('click', startGame);
     startBtn.addEventListener('click', hideRandomPicture);
     reloadBtn.addEventListener('click', () => {
-        showMessage('', 'info'); // Изчистване на съобщението
-        renderGamePics(); // Рестарт на играта с текущата тема и брой
-        resetGameState(); // Ресетване на състоянието за нова игра
+        showMessage('', 'info');
+        renderGamePics();
+        resetGameState();
     });
 
     // --- Първоначална инициализация при зареждане на страницата ---
-    updateStartButtonState(); // Проверява дали бутонът за старт трябва да е активен
-    // Скриване на контролите и игровото поле докато не започне играта
+    updateStartButtonState();
     document.getElementById('controls').classList.add('hidden');
     containerEl.classList.add('hidden');
 });
