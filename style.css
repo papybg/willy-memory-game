@@ -11,6 +11,10 @@
     --dashed-border-color: #aed581;
     --disabled-button-color: #ccc;
     --text-color-dark: #333;
+
+    /* Нови променливи за съобщенията */
+    --success-color: #28a745; /* Зелен за успех */
+    --error-color: #dc3545;   /* Червен за грешка */
 }
 
 body {
@@ -32,13 +36,34 @@ h1 {
   color: var(--text-color-dark);
 }
 
+/* Нови стилове за съобщенията */
 #gameMessage {
     margin: 10px 0 20px;
     font-size: 1.2rem;
     font-weight: bold;
-    color: var(--primary-color);
     min-height: 1.5em; /* За да не "скача" лейаутът */
+    opacity: 0; /* Първоначално скрито */
+    transform: scale(0.8); /* Първоначално по-малко */
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out, font-size 0.5s ease-out; /* Плавна анимация */
+    font-family: 'Comic Sans MS', cursive, sans-serif; /* По-забавен шрифт */
+    color: var(--primary-color); /* Дефолтен цвят */
 }
+
+/* Класове за анимирани съобщения */
+.message-animate {
+    opacity: 1 !important;
+    transform: scale(1) !important;
+    font-size: 2.5rem !important; /* Уголемяване */
+}
+
+.message-success {
+    color: var(--success-color);
+}
+
+.message-error {
+    color: var(--error-color);
+}
+
 
 #controls {
   margin-bottom: 20px;
@@ -124,7 +149,12 @@ button:disabled {
   cursor: pointer;
   border: 2px solid var(--border-color-dark);
   border-radius: 10px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.5s ease-out, visibility 0.5s ease-out; /* Добавени преходи за плавно връщане */
+}
+
+#gamePics img.hidden-picture { /* Клас, който ще скрива картинката плавно */
+    opacity: 0;
+    visibility: hidden;
 }
 
 #gamePics img:hover,
@@ -178,10 +208,6 @@ button:disabled {
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
-#themeOptions, #countOptions {
-    text-align: left;
-}
-
 #themeOptions label, #countOptions label {
     display: inline-block; /* За да са на един ред с радиобутона */
     margin-bottom: 5px;
@@ -202,7 +228,7 @@ button:disabled {
       font-size: 1.3rem;
   }
   #gameMessage {
-      font-size: 1.1rem;
+      font-size: 1.1rem; /* Намаляване на размера за таблет */
   }
   #gamePics img {
     width: 180px;
@@ -238,7 +264,7 @@ button:disabled {
       font-size: 1.2rem;
   }
   #gameMessage {
-      font-size: 1rem;
+      font-size: 1rem; /* Намаляване на размера за телефон */
   }
   #gamePics, #allPics {
     flex-direction: column; /* На телефони стават колона */
