@@ -1,1 +1,343 @@
+/* 🌟 Основни стилове и CSS променливи */
+:root {
+    --primary-color: #007bff; /* Основен син цвят */
+    --primary-hover-focus-color: #0056b3; /* Цвят при ховър/фокус */
+    --background-light: #f5f5f5;
+    --background-game-section-1: #e0f7fa; /* Светъл син за горна секция */
+    --background-game-section-2: #f0f4c3; /* Светъл зелен за долна секция */
+    --border-color-dark: #555;
+    --border-color-light: #ccc;
+    --border-color-primary: #007bff;
+    --dashed-border-color: #aed581;
+    --disabled-button-color: #ccc;
+    --text-color-dark: #333;
 
+    /* Нови променливи за съобщенията */
+    --success-color: #28a745; /* Зелен за успех */
+    --error-color: #dc3545;   /* Червен за грешка */
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 10px; /* Намален padding за по-добро използване на пространството */
+  text-align: center;
+  background-color: var(--background-light);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+h1 {
+  font-size: 2rem;
+  margin: 0.8rem 0; /* Намален margin */
+  color: var(--text-color-dark);
+}
+
+/* Нови стилове за съобщенията */
+#gameMessage {
+    margin-bottom: 10px; /* По-малък маржин от картинките */
+    font-size: 1.2rem;
+    font-weight: bold;
+    min-height: 1.5em;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out, font-size 0.5s ease-out;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    color: var(--primary-color);
+}
+
+/* Класове за анимирани съобщения */
+.message-animate {
+    opacity: 1 !important;
+    transform: scale(1) !important;
+    font-size: 2.5rem !important; /* Уголемяване */
+}
+
+.message-success {
+    color: var(--success-color);
+}
+
+.message-error {
+    color: var(--error-color);
+}
+
+#controls {
+  margin-bottom: 15px; /* Намален margin */
+}
+
+button {
+  padding: 10px 20px;
+  margin: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--primary-color);
+  color: white;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+  background-color: var(--primary-hover-focus-color);
+}
+
+button:focus {
+    background-color: var(--primary-hover-focus-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.4);
+}
+
+button:disabled {
+  background-color: var(--disabled-button-color);
+  cursor: not-allowed;
+}
+
+/* 🎮 Игрова зона - общ контейнер за двете групи картинки */
+#container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px; /* Намалено разстояние между game-section елементите */
+  width: 100%;
+  max-width: 1000px;
+  margin: 10px auto; /* Намален margin */
+}
+
+/* Секциите за игра */
+.game-section {
+    width: 100%;
+    max-width: 800px;
+    border-radius: 15px;
+    padding: 15px; /* Намален padding */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+.game-section h2 {
+    font-size: 1.5rem;
+    color: var(--text-color-dark);
+    margin-top: 0;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color-light);
+}
+
+/* 🎮 Игрови картинки – горна секция */
+#gamePics {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px; /* Намалено разстояние между картинките */
+  background-color: var(--background-game-section-1);
+  border: 2px solid var(--border-color-primary);
+  border-radius: 10px;
+  padding: 15px; /* Намален padding */
+  min-height: 180px; /* Намалена минимална височина */
+  /* position: relative;  Премахваме, не е нужно за тази анимация */
+}
+
+#gamePics img {
+  width: 180px; /* Намален размер за PC */
+  height: 180px;
+  object-fit: contain;
+  object-position: center;
+  cursor: pointer;
+  border: 2px solid var(--border-color-dark);
+  border-radius: 10px;
+  /* Анимация за скриване/показване */
+  transition: opacity 0.5s ease-out, transform 0.2s ease, box-shadow 0.2s ease;
+  /* Премахваме top, left, position, z-index от тук */
+}
+
+/* Стилове за празното място на скритата картинка */
+#gamePics .hidden-placeholder {
+    width: 180px; /* Запазва същия размер */
+    height: 180px;
+    border: 2px dashed var(--dashed-border-color); /* Пунктирана граница */
+    background-color: rgba(255, 255, 255, 0.5); /* Полупрозрачен фон */
+    border-radius: 10px; /* Същите заоблени ъгли */
+}
+
+/* Клас, който скрива картинката */
+#gamePics img.is-hidden {
+    opacity: 0;
+    visibility: hidden; /* Скриваме я напълно */
+    /* Премахваме position: absolute и свързаните стилове */
+}
+
+/* НОВ КЛАС ЗА АНИМАЦИЯ НА ВРЪЩАНЕ */
+#gamePics img.revealed-animation {
+    animation: revealPulse 0.8s ease-out;
+}
+
+@keyframes revealPulse {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    70% {
+        opacity: 1;
+        transform: scale(1.05); /* Леко уголемяване */
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1); /* Връщане към нормален размер */
+    }
+}
+
+
+#gamePics img:not(.is-hidden):hover,
+#gamePics img:not(.is-hidden):focus {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.6);
+  outline: none;
+}
+
+/* 🖼️ Странични (всички) картинки – долна секция */
+#allPics {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px; /* Намалено разстояние между картинките за избор */
+  background-color: var(--background-game-section-2);
+  border: 2px dashed var(--dashed-border-color);
+  border-radius: 10px;
+  padding: 15px; /* Намален padding */
+}
+
+#allPics img {
+  width: 120px; /* Намален размер за PC */
+  height: 120px;
+  object-fit: contain;
+  object-position: center;
+  cursor: pointer;
+  border: 2px solid var(--border-color-dark);
+  border-radius: 10px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#allPics img:hover,
+#allPics img:focus {
+  transform: scale(1.05);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+  outline: none;
+}
+
+/* 🎛️ Радио бутони и опции */
+#optionsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Намален gap */
+    margin: 1rem auto;
+    font-size: 1.1rem;
+    padding: 15px; /* Намален padding */
+    border: 1px solid var(--border-color-light);
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+#themeOptions label, #countOptions label {
+    display: inline-block;
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+/* Клас за скриване на елементи */
+.hidden {
+    display: none !important;
+}
+
+/* 📱 Адаптация за таблети */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.6rem;
+    margin: 0.6rem 0;
+  }
+  .game-section h2 {
+      font-size: 1.2rem;
+  }
+  #gameMessage {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+  }
+  #gamePics img {
+    width: 150px; /* Още по-малки за таблет */
+    height: 150px;
+  }
+  #allPics img {
+    width: 100px;
+    height: 100px;
+  }
+  button {
+    font-size: 0.8rem;
+    padding: 7px 14px;
+  }
+  #gamePics, #allPics {
+      gap: 10px; /* Намален gap */
+      padding: 10px;
+  }
+  #container {
+      gap: 20px;
+  }
+  #optionsContainer {
+      font-size: 0.95rem;
+      padding: 12px;
+      gap: 10px;
+  }
+}
+
+/* 📱 Адаптация за телефони */
+@media (max-width: 480px) {
+  body {
+      padding: 5px; /* Минимален padding */
+  }
+  h1 {
+    font-size: 1.3rem;
+    margin: 0.5rem 0;
+  }
+  .game-section h2 {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+  }
+  #gameMessage {
+      font-size: 0.9rem; /* Намаляване на размера за телефон */
+      margin-bottom: 5px;
+  }
+  #gamePics, #allPics {
+    /* Променяме на ред, за да се побере на един екран. Размерите на img ще са по-малки. */
+    flex-direction: row; 
+    align-items: center;
+    justify-content: center; 
+    gap: 5px; /* Още по-малко разстояние */
+    padding: 5px;
+  }
+  #gamePics img {
+    width: 70px; /* Значително намалени размери за да се поберат хоризонтално */
+    height: 70px;
+  }
+  #allPics img {
+    width: 50px; /* Значително намалени размери за да се поберат хоризонтално */
+    height: 50px;
+  }
+  #container {
+      gap: 15px; /* Намален gap */
+      margin: 5px auto;
+  }
+  button {
+    font-size: 0.75rem;
+    padding: 5px 10px;
+  }
+  #optionsContainer {
+      font-size: 0.85rem;
+      padding: 8px;
+      gap: 8px;
+  }
+  .message-animate {
+    font-size: 1.8rem !important; /* Уголемяване на съобщението за мобилен */
+  }
+}
