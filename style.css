@@ -131,7 +131,7 @@ button:disabled {
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  gap: 20px; /* Намалено разстояние между картинките */
+  gap: 20px; /* По-голямо разстояние между картинките */
   background-color: var(--background-game-section-1);
   border: 2px solid var(--border-color-primary);
   border-radius: 10px;
@@ -148,29 +148,28 @@ button:disabled {
   cursor: pointer;
   border: 2px solid var(--border-color-dark);
   border-radius: 10px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.5s ease-out; /* visibility премахнат */
-  /* Нови стилове за плавно връщане */
-  position: absolute; /* Временно позициониране за анимация */
-  left: var(--start-x, auto); /* Динамични променливи от JS */
-  top: var(--start-y, auto);
+  /* Анимация за движение и плавно показване */
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.5s ease-out, translate 0.5s ease-out;
+  /* Използваме translate вместо left/top за плавно движение */
+  transform: translate3d(0, 0, 0); /* Задейства хардуерно ускорение */
   z-index: 10; /* За да е над всичко останало по време на анимация */
 }
 
 /* Стилове за празното място на скритата картинка */
-#gamePics img.hidden-placeholder {
-    opacity: 0; /* Невидимо, но запазва място */
-    visibility: hidden; /* Скрито, но може да не е необходимо с opacity:0 */
-    border: 2px dashed var(--dashed-border-color); /* Пунктирана граница */
-    background-color: rgba(255, 255, 255, 0.5); /* Полупрозрачен фон */
-    transition: none; /* Без преходи за плейсхолдъра */
-    position: static; /* За да е на място във Flexbox */
+#gamePics .hidden-placeholder {
     width: 180px; /* Запазва същия размер */
     height: 180px;
+    border: 2px dashed var(--dashed-border-color); /* Пунктирана граница */
+    background-color: rgba(255, 255, 255, 0.5); /* Полупрозрачен фон */
+    border-radius: 10px; /* Същите заоблени ъгли */
 }
 
-#gamePics img.is-hidden { /* Клас за плавно скриване */
+/* Клас, който скрива картинката и я премества извън погледа, но не я маха от DOM */
+#gamePics img.is-hidden {
     opacity: 0;
     pointer-events: none; /* За да не може да се клика */
+    /* Може да я преместите извън екрана за анимация */
+    transform: translate3d(var(--move-x, 0), var(--move-y, 0), 0) scale(0.5); /* Движи се и се смалява */
 }
 
 #gamePics img:not(.is-hidden):hover,
@@ -306,9 +305,9 @@ button:disabled {
     width: 60px; /* Значително намалени размери за да се поберат */
     height: 60px;
   }
-  #allPics { /* На мобилен #allPics да е над #gamePics, ако трябва */
-      order: -1; /* Може да промени реда, ако е необходимо. Засега не е нужно, тъй като и двете са в колона. */
-  }
+  /* #allPics { /* На мобилен #allPics да е над #gamePics, ако трябва */
+      /* order: -1; */ /* Може да промени реда, ако е необходимо. Засега не е нужно, тъй като и двете са в колона. */
+  /* } */
   #container {
       gap: 15px; /* Намален gap */
       margin: 5px auto;
