@@ -8,7 +8,7 @@
     --border-color-dark: #555;
     --border-color-light: #ccc;
     --border-color-primary: #007bff;
-    --dashed-border-color: #aed581;
+    --dashed-border-color: #aed581; /* Този цвят може да не е нужен вече */
     --disabled-button-color: #ccc;
     --text-color-dark: #333;
 
@@ -20,7 +20,7 @@
 body {
   font-family: Arial, sans-serif;
   margin: 0;
-  padding: 10px; /* Намален padding за по-добро използване на пространството */
+  padding: 10px;
   text-align: center;
   background-color: var(--background-light);
   display: flex;
@@ -32,13 +32,12 @@ body {
 
 h1 {
   font-size: 2rem;
-  margin: 0.8rem 0; /* Намален margin */
+  margin: 0.8rem 0;
   color: var(--text-color-dark);
 }
 
-/* Нови стилове за съобщенията */
 #gameMessage {
-    margin-bottom: 10px; /* По-малък маржин от картинките */
+    margin-bottom: 10px;
     font-size: 1.2rem;
     font-weight: bold;
     min-height: 1.5em;
@@ -49,11 +48,10 @@ h1 {
     color: var(--primary-color);
 }
 
-/* Класове за анимирани съобщения */
 .message-animate {
     opacity: 1 !important;
     transform: scale(1) !important;
-    font-size: 2.5rem !important; /* Уголемяване */
+    font-size: 2.5rem !important;
 }
 
 .message-success {
@@ -65,7 +63,7 @@ h1 {
 }
 
 #controls {
-  margin-bottom: 15px; /* Намален margin */
+  margin-bottom: 15px;
 }
 
 button {
@@ -95,23 +93,21 @@ button:disabled {
   cursor: not-allowed;
 }
 
-/* 🎮 Игрова зона - общ контейнер за двете групи картинки */
 #container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 30px; /* Намалено разстояние между game-section елементите */
+  gap: 30px;
   width: 100%;
   max-width: 1000px;
-  margin: 10px auto; /* Намален margin */
+  margin: 10px auto;
 }
 
-/* Секциите за игра */
 .game-section {
     width: 100%;
     max-width: 800px;
     border-radius: 15px;
-    padding: 15px; /* Намален padding */
+    padding: 15px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
 }
@@ -125,51 +121,43 @@ button:disabled {
     border-bottom: 1px solid var(--border-color-light);
 }
 
-/* 🎮 Игрови картинки – горна секция */
 #gamePics {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  gap: 20px; /* Намалено разстояние между картинките */
+  gap: 20px;
   background-color: var(--background-game-section-1);
   border: 2px solid var(--border-color-primary);
   border-radius: 10px;
-  padding: 15px; /* Намален padding */
-  min-height: 180px; /* Намалена минимална височина */
-  /* position: relative;  Премахваме, не е нужно за тази анимация */
+  padding: 15px;
+  min-height: 180px;
 }
 
 #gamePics img {
-  width: 180px; /* Намален размер за PC */
+  width: 180px;
   height: 180px;
   object-fit: contain;
   object-position: center;
   cursor: pointer;
   border: 2px solid var(--border-color-dark);
   border-radius: 10px;
-  /* Анимация за скриване/показване */
+  /* Сега ще използваме само opacity и visibility за скриване/показване */
   transition: opacity 0.5s ease-out, transform 0.2s ease, box-shadow 0.2s ease;
-  /* Премахваме top, left, position, z-index от тук */
 }
 
-/* Стилове за празното място на скритата картинка */
-#gamePics .hidden-placeholder {
-    width: 180px; /* Запазва същия размер */
-    height: 180px;
-    border: 2px dashed var(--dashed-border-color); /* Пунктирана граница */
-    background-color: rgba(255, 255, 255, 0.5); /* Полупрозрачен фон */
-    border-radius: 10px; /* Същите заоблени ъгли */
-}
-
-/* Клас, който скрива картинката */
+/* КЛЮЧОВА ПРОМЯНА: is-hidden просто скрива картинката */
 #gamePics img.is-hidden {
     opacity: 0;
     visibility: hidden; /* Скриваме я напълно */
-    /* Премахваме position: absolute и свързаните стилове */
+    pointer-events: none; /* Не може да се клика, докато е скрита */
 }
 
-/* НОВ КЛАС ЗА АНИМАЦИЯ НА ВРЪЩАНЕ */
+/* КЛЮЧОВА ПРОМЯНА: Премахваме hidden-placeholder, няма да го използваме */
+/* #gamePics .hidden-placeholder { ... } */
+
+
+/* Клас за анимация на връщане - остава същият */
 #gamePics img.revealed-animation {
     animation: revealPulse 0.8s ease-out;
 }
@@ -197,20 +185,19 @@ button:disabled {
   outline: none;
 }
 
-/* 🖼️ Странични (всички) картинки – долна секция */
 #allPics {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 10px; /* Намалено разстояние между картинките за избор */
+  gap: 10px;
   background-color: var(--background-game-section-2);
-  border: 2px dashed var(--dashed-border-color);
+  border: 2px dashed var(--dashed-border-color); /* Може би и този цвят няма да е нужен вече */
   border-radius: 10px;
-  padding: 15px; /* Намален padding */
+  padding: 15px;
 }
 
 #allPics img {
-  width: 120px; /* Намален размер за PC */
+  width: 120px;
   height: 120px;
   object-fit: contain;
   object-position: center;
@@ -227,14 +214,13 @@ button:disabled {
   outline: none;
 }
 
-/* 🎛️ Радио бутони и опции */
 #optionsContainer {
     display: flex;
     flex-direction: column;
-    gap: 15px; /* Намален gap */
+    gap: 15px;
     margin: 1rem auto;
     font-size: 1.1rem;
-    padding: 15px; /* Намален padding */
+    padding: 15px;
     border: 1px solid var(--border-color-light);
     border-radius: 10px;
     background-color: #fff;
@@ -247,7 +233,6 @@ button:disabled {
     cursor: pointer;
 }
 
-/* Клас за скриване на елементи */
 .hidden {
     display: none !important;
 }
@@ -266,7 +251,7 @@ button:disabled {
       margin-bottom: 8px;
   }
   #gamePics img {
-    width: 150px; /* Още по-малки за таблет */
+    width: 150px;
     height: 150px;
   }
   #allPics img {
@@ -278,7 +263,7 @@ button:disabled {
     padding: 7px 14px;
   }
   #gamePics, #allPics {
-      gap: 10px; /* Намален gap */
+      gap: 10px;
       padding: 10px;
   }
   #container {
@@ -294,7 +279,7 @@ button:disabled {
 /* 📱 Адаптация за телефони */
 @media (max-width: 480px) {
   body {
-      padding: 5px; /* Минимален padding */
+      padding: 5px;
   }
   h1 {
     font-size: 1.3rem;
@@ -305,27 +290,26 @@ button:disabled {
       margin-bottom: 10px;
   }
   #gameMessage {
-      font-size: 0.9rem; /* Намаляване на размера за телефон */
+      font-size: 0.9rem;
       margin-bottom: 5px;
   }
   #gamePics, #allPics {
-    /* Променяме на ред, за да се побере на един екран. Размерите на img ще са по-малки. */
-    flex-direction: row; 
+    flex-direction: row;
     align-items: center;
-    justify-content: center; 
-    gap: 5px; /* Още по-малко разстояние */
+    justify-content: center;
+    gap: 5px;
     padding: 5px;
   }
   #gamePics img {
-    width: 70px; /* Значително намалени размери за да се поберат хоризонтално */
+    width: 70px;
     height: 70px;
   }
   #allPics img {
-    width: 50px; /* Значително намалени размери за да се поберат хоризонтално */
+    width: 50px;
     height: 50px;
   }
   #container {
-      gap: 15px; /* Намален gap */
+      gap: 15px;
       margin: 5px auto;
   }
   button {
@@ -338,6 +322,6 @@ button:disabled {
       gap: 8px;
   }
   .message-animate {
-    font-size: 1.8rem !important; /* Уголемяване на съобщението за мобилен */
+    font-size: 1.8rem !important;
   }
 }
