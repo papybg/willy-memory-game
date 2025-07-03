@@ -30,7 +30,34 @@ body {
   min-height: 100vh;
   box-sizing: border-box;
 }
+/* 🌟 Цветове за текстовите редове в опциите */
+#optionsContainer .option-line-1 {
+    color: red;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+#optionsContainer .option-line-2 {
+    color: blue;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+/* За бутона, променяме цвета на текста */
+#startGameBtn.option-line-3 {
+    color: green; /* Цветен текст на бутона */
+    font-weight: bold;
+    background-color: var(--primary-color); /* Можете да запазите или промените фона */
+}
 
+/* 🌟 Нови стилове за конкретните теми */
+#optionsContainer .theme-animals {
+    color: brown; /* Кафяв цвят за "Животни" */
+    font-weight: bold; /* Можете да го удебелите, ако искате */
+}
+
+#optionsContainer .theme-flowers {
+    color: green; /* Зелен цвят за "Цветя" */
+    font-weight: bold; /* Можете да го удебелите, ако искате */
+}
 /* 🌟 Стилове за заглавието на играта (#gameTitle) */
 #gameTitle {
   font-size: 3rem; /* По-голям размер */
