@@ -54,9 +54,12 @@ document.addEventListener('DOMContentLoaded', () => {
         containerEl.classList.remove('hidden');
 
         renderGamePics();
-        // ВАЖНО: resetGameState се извиква след renderGamePics, за да гарантира, че всички картинки са видими и overlay-ят е скрит
-        resetGameState(); 
         renderAllPics();
+        // ВАЖНО: resetGameState се извиква след renderGamePics, за да гарантира, че всички картинки са видими и overlay-ят е скрит
+        // Забавяме го малко, за да се гарантира, че renderGamePics е завършил и DOM е готов
+        setTimeout(() => {
+            resetGameState(); 
+        }, 100); 
     }
 
     function renderAllPics() {
@@ -93,15 +96,29 @@ document.addEventListener('DOMContentLoaded', () => {
             gamePicsEl.appendChild(hideOverlayElement); // Добавяме го в контейнера, но е скрит от CSS
         }
         
-        // Бутоните се контролират от resetGameState
+        // Ensure the overlay is hidden and reset when new game pics are rendered
+        hideOverlayElement.classList.remove('is-visible');
+        hideOverlayElement.style.top = ''; 
+        hideOverlayElement.style.left = '';
     }
 
     // Функция за скриване на произволна картинка
     function hideRandomPicture() {
         if (awaitingChoice) return;
 
-        // Първо нулираме предишното състояние, ако има такова
-        resetGameState(); 
+        // Първо нулираме предишното състояние, ако има такова (ако е имало предишно скриване)
+        // Това е за случаи, когато играчът натисне "СКРИЙ КАРТИНА" отново, без да е познал предишната
+        if (hiddenImageElement && hideOverlayElement.classList.contains('is-visible')) {
+            // Ако има вече скрита картинка и овърлеят е видим, върни оригиналната видима
+            hiddenImageElement.style.opacity = '1';
+            hiddenImageElement.style.visibility = 'visible';
+            hiddenImageElement.style.pointerEvents = 'auto';
+            hideOverlayElement.classList.remove('is-visible');
+            hideOverlayElement.style.top = ''; 
+            hideOverlayElement.style.left = '';
+            hiddenImageElement = null; // Нулираме я
+        }
+
 
         hiddenIndex = Math.floor(Math.random() * numberOfPics);
         hiddenImageElement = gamePicsEl.querySelectorAll('img')[hiddenIndex]; // Взимаме референция към картинката, която ще скрием
@@ -111,14 +128,10 @@ document.addEventListener('DOMContentLoaded', () => {
         hiddenImageElement.style.visibility = 'hidden';
         hiddenImageElement.style.pointerEvents = 'none'; // Прави я некликаема
 
-        // Позиционираме hideOverlayElement точно над скритата картинка
-        const imgRect = hiddenImageElement.getBoundingClientRect();
-        const gamePicsRect = gamePicsEl.getBoundingClientRect(); // Родителят, спрямо който е position: absolute
-
-        // Използваме offsetTop/offsetLeft на родителя, ако е възможно, за по-стабилно позициониране
-        // или разликата между top/left на елемента и родителя
-        hideOverlayElement.style.top = `${imgRect.top - gamePicsRect.top}px`;
-        hideOverlayElement.style.left = `${imgRect.left - gamePicsRect.left}px`;
+        // *КОРЕКЦИЯ*: Позиционираме hideOverlayElement спрямо offsetLeft/offsetTop на целевия елемент
+        // спрямо родителя (gamePicsEl). Това е по-стабилно при скрол и различни позиционирания
+        hideOverlayElement.style.top = `${hiddenImageElement.offsetTop}px`;
+        hideOverlayElement.style.left = `${hiddenImageElement.offsetLeft}px`;
         
         // Показваме overlay картинката плавно
         hideOverlayElement.classList.add('is-visible');
@@ -209,6 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
     startBtn.addEventListener('click', hideRandomPicture);
     reloadBtn.addEventListener('click', () => {
         showMessage('', 'info'); // Изчиства съобщението
+        // renderGamePics() вече изчиства и скрива overlay-я
         renderGamePics(); // Това ще пресъздаде всички картинки
         resetGameState(); // Гарантира чисто състояние и скрит overlay
     });
