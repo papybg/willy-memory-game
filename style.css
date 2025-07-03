@@ -122,7 +122,7 @@ button:disabled {
 }
 
 #gamePics {
-  position: relative; /* КЛЮЧОВА ПРОМЯНА: Задаваме relative за позициониране на наслагващия елемент */
+  /* НЯМА НУЖДА ОТ position: relative; вече */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -144,34 +144,10 @@ button:disabled {
   border: 2px solid var(--border-color-dark);
   border-radius: 10px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  /* Важно: Не скриваме оригиналната картинка тук, JavaScript ще я скрие индивидуално */
+  /* Няма нужда от opacity/visibility за скриване/показване на самите картинки */
 }
 
-/* Изцяло нов клас за наслагващата картинка (hide.png) */
-.hide-overlay {
-    position: absolute; /* Позиционираме я над другите елементи */
-    width: 180px; /* Същият размер като картинките */
-    height: 180px;
-    object-fit: fill; /* За да покрие изцяло, може да деформира hide.png */
-    object-position: center;
-    border-radius: 10px;
-    
-    /* Първоначално е скрита */
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none; /* Да не може да се клика върху нея, когато е скрита */
-    
-    transition: opacity 0.5s ease-out; /* Плавна анимация за появяване/изчезване */
-    z-index: 10; /* Да е над другите картинки */
-    /* top и left ще се задават от JS динамично */
-}
-
-/* Клас за показване на наслагващата картинка */
-.hide-overlay.is-visible {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto; /* Може да се клика, когато е видима (ако е необходимо) */
-}
+/* Изцяло премахваме класа .hide-overlay, защото няма да се ползва */
 
 
 #gamePics img:hover,
@@ -250,11 +226,7 @@ button:disabled {
     width: 150px;
     height: 150px;
   }
-  .hide-overlay { /* Адаптираме размера и за overlay-я */
-    width: 150px;
-    height: 150px;
-    object-fit: fill; /* За да покрие изцяло */
-  }
+  /* Премахваме адаптацията за .hide-overlay тук също */
   #allPics img {
     width: 100px;
     height: 100px;
@@ -305,11 +277,7 @@ button:disabled {
     width: 70px;
     height: 70px;
   }
-  .hide-overlay { /* Адаптираме размера и за overlay-я */
-    width: 70px;
-    height: 70px;
-    object-fit: fill; /* За да покрие изцяло */
-  }
+  /* Премахваме адаптацията за .hide-overlay тук също */
   #allPics img {
     width: 50px;
     height: 50px;
