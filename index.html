@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Познай КАРТИНКАТА!</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1 id="gameTitle">Познай КАРТИНКАТА!</h1>
+
+    <div id="optionsContainer">
+        <h2>МЕНЮ</h2> <p class="option-line-1">Избери тема:</p> <div id="themeOptions">
+            <label><input type="radio" name="theme" value="превозни_средства"> Превозни средства</label>
+            <label><input type="radio" name="theme" value="animals"> Животни</label>
+            <label><input type="radio" name="theme" value="flowers"> Цветя</label>
+        </div>
+        <p class="option-line-2">Избери брой картинки:</p> <div id="countOptions">
+            <label><input type="radio" name="count" value="2"> 2</label>
+            <label><input type="radio" name="count" value="3"> 3</label>
+            <label><input type="radio" name="count" value="4"> 4</label>
+            <label><input type="radio" name="count" value="5"> 5</label>
+        </div>
+        <button id="startGameBtn" disabled class="option-line-3">Започни играта</button> </div>
+
+    <div id="gameMessage"></div>
+
+    <div id="controls" class="hidden">
+        <button id="start">СКРИЙ КАРТИНА</button>
+        <button id="reload" class="hidden">НОВА ИГРА</button>
+    </div>
+
+    <div id="container" class="hidden">
+        <div id="gamePics" class="game-section">
+            </div>
+        <div id="allPics" class="game-section">
+            </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
