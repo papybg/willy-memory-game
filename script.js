@@ -1,4 +1,4 @@
-/ script.js
+// script.js
 document.addEventListener('DOMContentLoaded', () => {
     // 🎯 Дефиниции на темите и техните изображения
     const ALL_THEMES = {
@@ -30,13 +30,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let originalHiddenImageSrc = ''; // Ще съхранява оригиналния src на скритата картинка
     let originalHiddenImageName = ''; // Ще съхранява оригиналното име на скритата картинка (от data-name)
     let awaitingChoice = false;
-    // hideOverlayElement вече НЕ се използва, тъй като заместваме src директно
 
     // --- Функции ---
 
     function updateStartButtonState() {
+        // console.log('updateStartButtonState called'); // За дебъгване
         const themeSelected = Array.from(themeRadios).some(r => r.checked);
         const countSelected = Array.from(countRadios).some(r => r.checked);
+        // console.log('Theme Selected:', themeSelected, 'Count Selected:', countSelected); // За дебъгване
         startGameBtn.disabled = !(themeSelected && countSelected);
     }
 
@@ -85,7 +86,6 @@ document.addEventListener('DOMContentLoaded', () => {
             img.alt = name.replace('.jpg', '');
             gamePicsEl.appendChild(img);
         });
-        // Вече НЯМА нужда да създаваме hideOverlayElement тук
     }
 
     // Функция за скриване на произволна картинка (чрез директна подмяна на src)
@@ -190,8 +190,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Първоначална инициализация при зареждане на страницата ---
     updateStartButtonState(); 
+    // ^ Тази функция се извиква веднъж при зареждане на страницата
 
-    // Уверете се, че контролите и контейнерът са скрити при първоначално зареждане
     document.getElementById('controls').classList.add('hidden');
     containerEl.classList.add('hidden');
 });
