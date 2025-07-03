@@ -25,10 +25,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentThemeImages = [];
     let numberOfPics = 0;
     let selectedGamePics = [];
-    let hiddenImageElement = null; // Референция към СКРИТИЯ оригинален img елемент
+    let hiddenImageElement = null; // Референция към img елемента, който ще бъде заменен с hide.png
     let hiddenIndex = null;
+    let originalHiddenImageSrc = ''; // Ще съхранява оригиналния src на скритата картинка
+    let originalHiddenImageName = ''; // Ще съхранява оригиналното име на скритата картинка (от data-name)
     let awaitingChoice = false;
-    let hideOverlayElement = null; // Референция към наслагващата hide.png картинка
+    // hideOverlayElement вече НЕ се използва, тъй като заместваме src директно
 
     // --- Функции ---
 
@@ -45,8 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentThemeImages = ALL_THEMES[selectedTheme];
 
         gameTitleEl.textContent = `Познай ${selectedTheme.replace('_', ' ').toUpperCase()}!`;
-        showMessage('Натисни "СКРИЙ КАРТИНА" за да започнеш.', 'info');
-
+        
         optionsContainer.classList.add('hidden');
         startGameBtn.classList.add('hidden');
 
@@ -55,11 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         renderGamePics();
         renderAllPics();
-        // ВАЖНО: resetGameState се извиква след renderGamePics, за да гарантира, че всички картинки са видими и overlay-ят е скрит
-        // Забавяме го малко, за да се гарантира, че renderGamePics е завършил и DOM е готов
-        setTimeout(() => {
-            resetGameState(); 
-        }, 100); 
+        resetGameState(); // Нулираме състоянието веднага след рендерирането
     }
 
     function renderAllPics() {
@@ -84,58 +81,36 @@ document.addEventListener('DOMContentLoaded', () => {
             const img = document.createElement('img');
             img.src = 'images/' + name;
             img.dataset.idx = idx;
+            img.dataset.name = name; // Добавяме data-name за всяка картинка
             img.alt = name.replace('.jpg', '');
             gamePicsEl.appendChild(img);
         });
-
-        // Създаваме overlay елемента само веднъж и го добавяме към gamePicsEl
-        if (!hideOverlayElement) {
-            hideOverlayElement = document.createElement('img');
-            hideOverlayElement.src = 'images/hide.png'; // Пътя до вашата hide.png картинка
-            hideOverlayElement.classList.add('hide-overlay');
-            gamePicsEl.appendChild(hideOverlayElement); // Добавяме го в контейнера, но е скрит от CSS
-        }
-        
-        // Ensure the overlay is hidden and reset when new game pics are rendered
-        hideOverlayElement.classList.remove('is-visible');
-        hideOverlayElement.style.top = ''; 
-        hideOverlayElement.style.left = '';
+        // Вече НЯМА нужда да създаваме hideOverlayElement тук
     }
 
-    // Функция за скриване на произволна картинка
+    // Функция за скриване на произволна картинка (чрез директна подмяна на src)
     function hideRandomPicture() {
         if (awaitingChoice) return;
 
-        // Първо нулираме предишното състояние, ако има такова (ако е имало предишно скриване)
-        // Това е за случаи, когато играчът натисне "СКРИЙ КАРТИНА" отново, без да е познал предишната
-        if (hiddenImageElement && hideOverlayElement.classList.contains('is-visible')) {
-            // Ако има вече скрита картинка и овърлеят е видим, върни оригиналната видима
-            hiddenImageElement.style.opacity = '1';
-            hiddenImageElement.style.visibility = 'visible';
-            hiddenImageElement.style.pointerEvents = 'auto';
-            hideOverlayElement.classList.remove('is-visible');
-            hideOverlayElement.style.top = ''; 
-            hideOverlayElement.style.left = '';
-            hiddenImageElement = null; // Нулираме я
+        // Ако вече има скрита картинка от предишен опит без познаване, върни я видима
+        if (hiddenImageElement && hiddenImageElement.src.includes('hide.png')) {
+            hiddenImageElement.src = originalHiddenImageSrc;
+            hiddenImageElement.dataset.name = originalHiddenImageName;
+            hiddenImageElement.alt = originalHiddenImageName.replace('.jpg', '');
         }
 
-
         hiddenIndex = Math.floor(Math.random() * numberOfPics);
-        hiddenImageElement = gamePicsEl.querySelectorAll('img')[hiddenIndex]; // Взимаме референция към картинката, която ще скрием
+        hiddenImageElement = gamePicsEl.querySelectorAll('img')[hiddenIndex]; // Взимаме референция към картинката, която ще СКРИЕМ
 
-        // *КОРЕКЦИЯ*: Скриваме оригиналната картинка
-        hiddenImageElement.style.opacity = '0';
-        hiddenImageElement.style.visibility = 'hidden';
-        hiddenImageElement.style.pointerEvents = 'none'; // Прави я некликаема
+        // Съхраняваме оригиналните данни, преди да ги променим
+        originalHiddenImageSrc = hiddenImageElement.src;
+        originalHiddenImageName = hiddenImageElement.dataset.name;
 
-        // *КОРЕКЦИЯ*: Позиционираме hideOverlayElement спрямо offsetLeft/offsetTop на целевия елемент
-        // спрямо родителя (gamePicsEl). Това е по-стабилно при скрол и различни позиционирания
-        hideOverlayElement.style.top = `${hiddenImageElement.offsetTop}px`;
-        hideOverlayElement.style.left = `${hiddenImageElement.offsetLeft}px`;
+        // *КЛЮЧОВА ПРОМЯНА*: Директно сменяме src на оригиналната картинка
+        hiddenImageElement.src = 'images/hide.png';
+        hiddenImageElement.dataset.name = 'hide.png'; // Важно: Обновяваме и data-name за да го разпознаваме
+        hiddenImageElement.alt = 'Скрита картинка';
         
-        // Показваме overlay картинката плавно
-        hideOverlayElement.classList.add('is-visible');
-
         awaitingChoice = true;
         startBtn.classList.add('hidden');
         showMessage('Познай кое липсва!', 'info');
@@ -146,24 +121,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!awaitingChoice) return;
 
         const chosen = e.target.dataset.name;
-        const hidden = selectedGamePics[hiddenIndex];
+        // Използваме originalHiddenImageName, защото hiddenImageElement.dataset.name вече е "hide.png"
+        const hidden = originalHiddenImageName; 
 
         if (chosen === hidden) {
             showMessage('Браво, Уйли!', 'success');
             
-            // Скриваме hide-overlay елемента плавно
-            if (hideOverlayElement) {
-                hideOverlayElement.classList.remove('is-visible');
-                // Изчистваме инлайн стиловете за позиция, за да не пречат при следващо позициониране
-                hideOverlayElement.style.top = ''; 
-                hideOverlayElement.style.left = '';
-            }
-
-            // *КОРЕКЦИЯ*: Показваме оригиналната картинка
+            // *КЛЮЧОВА ПРОМЯНА*: Връщаме оригиналната картинка
             if (hiddenImageElement) {
-                hiddenImageElement.style.opacity = '1';
-                hiddenImageElement.style.visibility = 'visible';
-                hiddenImageElement.style.pointerEvents = 'auto'; // Прави я кликаема отново
+                hiddenImageElement.src = originalHiddenImageSrc;
+                hiddenImageElement.dataset.name = originalHiddenImageName;
+                hiddenImageElement.alt = originalHiddenImageName.replace('.jpg', '');
             }
 
             awaitingChoice = false;
@@ -190,23 +158,17 @@ document.addEventListener('DOMContentLoaded', () => {
         awaitingChoice = false;
         hiddenIndex = null;
         
-        // *КОРЕКЦИЯ*: Покажи всички картинки в #gamePics, ако са скрити
-        gamePicsEl.querySelectorAll('img').forEach(img => {
-            img.style.opacity = '1';
-            img.style.visibility = 'visible';
-            img.style.pointerEvents = 'auto';
-        });
-
-        // Скриваме hide-overlay, ако е видим
-        if (hideOverlayElement) {
-            hideOverlayElement.classList.remove('is-visible'); // Скрива го
-            // Изчистваме инлайн стиловете за позиция
-            hideOverlayElement.style.top = ''; 
-            hideOverlayElement.style.left = '';
+        // *КОРЕКЦИЯ*: Ако имаше скрита картинка с hide.png, върни я оригинална
+        if (hiddenImageElement && hiddenImageElement.src.includes('hide.png')) {
+            hiddenImageElement.src = originalHiddenImageSrc;
+            hiddenImageElement.dataset.name = originalHiddenImageName;
+            hiddenImageElement.alt = originalHiddenImageName.replace('.jpg', '');
         }
-
-        // Нулираме референцията към скритата картинка за следваща игра
+        
+        // Нулираме референциите за чисто състояние
         hiddenImageElement = null; 
+        originalHiddenImageSrc = '';
+        originalHiddenImageName = '';
 
         showMessage('Натисни "СКРИЙ КАРТИНА" за да започнеш.', 'info');
         
@@ -222,14 +184,14 @@ document.addEventListener('DOMContentLoaded', () => {
     startBtn.addEventListener('click', hideRandomPicture);
     reloadBtn.addEventListener('click', () => {
         showMessage('', 'info'); // Изчиства съобщението
-        // renderGamePics() вече изчиства и скрива overlay-я
-        renderGamePics(); // Това ще пресъздаде всички картинки
-        resetGameState(); // Гарантира чисто състояние и скрит overlay
+        renderGamePics(); // Това ще пресъздаде всички картинки и ще реши проблема със скрита картинка
+        resetGameState(); // Гарантира чисто състояние
     });
 
     // --- Първоначална инициализация при зареждане на страницата ---
     updateStartButtonState(); 
 
+    // Уверете се, че контролите и контейнерът са скрити при първоначално зареждане
     document.getElementById('controls').classList.add('hidden');
     containerEl.classList.add('hidden');
 });
