@@ -25,19 +25,21 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentThemeImages = [];
     let numberOfPics = 0;
     let selectedGamePics = [];
-    let hiddenImageElement = null; // Референция към img елемента, който ще бъде заменен с hide.png
+    let hiddenImageElement = null;
     let hiddenIndex = null;
-    let originalHiddenImageSrc = ''; // Ще съхранява оригиналния src на скритата картинка
-    let originalHiddenImageName = ''; // Ще съхранява оригиналното име на скритата картинка (от data-name)
+    let originalHiddenImageSrc = '';
+    let originalHiddenImageName = '';
     let awaitingChoice = false;
+
+    // НОВО: Аудио елементи за успех и грешка
+    const bravoAudio = new Audio('audio/bravo_uily.wav'); 
+    const opitaiPakAudio = new Audio('audio/opitaj_pak.wav'); // НОВО: Пътят към новия WAV файл
 
     // --- Функции ---
 
     function updateStartButtonState() {
-        // console.log('updateStartButtonState called'); // За дебъгване
         const themeSelected = Array.from(themeRadios).some(r => r.checked);
         const countSelected = Array.from(countRadios).some(r => r.checked);
-        // console.log('Theme Selected:', themeSelected, 'Count Selected:', countSelected); // За дебъгване
         startGameBtn.disabled = !(themeSelected && countSelected);
     }
 
@@ -57,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         renderGamePics();
         renderAllPics();
-        resetGameState(); // Нулираме състоянието веднага след рендерирането
+        resetGameState();
     }
 
     function renderAllPics() {
@@ -73,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderGamePics() {
-        gamePicsEl.innerHTML = ''; // Изчистваме старите картинки
+        gamePicsEl.innerHTML = ''; 
 
         const shuffledImages = [...currentThemeImages].sort(() => 0.5 - Math.random());
         selectedGamePics = shuffledImages.slice(0, numberOfPics);
@@ -82,17 +84,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const img = document.createElement('img');
             img.src = 'images/' + name;
             img.dataset.idx = idx;
-            img.dataset.name = name; // Добавяме data-name за всяка картинка
+            img.dataset.name = name;
             img.alt = name.replace('.jpg', '');
             gamePicsEl.appendChild(img);
         });
     }
 
-    // Функция за скриване на произволна картинка (чрез директна подмяна на src)
     function hideRandomPicture() {
         if (awaitingChoice) return;
 
-        // Ако вече има скрита картинка от предишен опит без познаване, върни я видима
         if (hiddenImageElement && hiddenImageElement.src.includes('hide.png')) {
             hiddenImageElement.src = originalHiddenImageSrc;
             hiddenImageElement.dataset.name = originalHiddenImageName;
@@ -100,15 +100,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         hiddenIndex = Math.floor(Math.random() * numberOfPics);
-        hiddenImageElement = gamePicsEl.querySelectorAll('img')[hiddenIndex]; // Взимаме референция към картинката, която ще СКРИЕМ
+        hiddenImageElement = gamePicsEl.querySelectorAll('img')[hiddenIndex]; 
 
-        // Съхраняваме оригиналните данни, преди да ги променим
         originalHiddenImageSrc = hiddenImageElement.src;
         originalHiddenImageName = hiddenImageElement.dataset.name;
 
-        // *КЛЮЧОВА ПРОМЯНА*: Директно сменяме src на оригиналната картинка
         hiddenImageElement.src = 'images/hide.png';
-        hiddenImageElement.dataset.name = 'hide.png'; // Важно: Обновяваме и data-name за да го разпознаваме
+        hiddenImageElement.dataset.name = 'hide.png';
         hiddenImageElement.alt = 'Скрита картинка';
         
         awaitingChoice = true;
@@ -116,18 +114,18 @@ document.addEventListener('DOMContentLoaded', () => {
         showMessage('Познай кое липсва!', 'info');
     }
 
-    // Обработка на избора на играча от долните картинки
     function chooseHandler(e) {
         if (!awaitingChoice) return;
 
         const chosen = e.target.dataset.name;
-        // Използваме originalHiddenImageName, защото hiddenImageElement.dataset.name вече е "hide.png"
         const hidden = originalHiddenImageName; 
 
         if (chosen === hidden) {
             showMessage('Браво, Уйли!', 'success');
             
-            // *КЛЮЧОВА ПРОМЯНА*: Връщаме оригиналната картинка
+            bravoAudio.currentTime = 0; 
+            bravoAudio.play().catch(e => console.error("Error playing audio:", e));
+            
             if (hiddenImageElement) {
                 hiddenImageElement.src = originalHiddenImageSrc;
                 hiddenImageElement.dataset.name = originalHiddenImageName;
@@ -139,6 +137,9 @@ document.addEventListener('DOMContentLoaded', () => {
             startBtn.classList.add('hidden');
         } else {
             showMessage('Опитай пак!', 'error');
+            // НОВО: Възпроизвеждане на аудиото за грешен отговор
+            opitaiPakAudio.currentTime = 0; 
+            opitaiPakAudio.play().catch(e => console.error("Error playing audio:", e));
         }
     }
 
@@ -158,14 +159,12 @@ document.addEventListener('DOMContentLoaded', () => {
         awaitingChoice = false;
         hiddenIndex = null;
         
-        // *КОРЕКЦИЯ*: Ако имаше скрита картинка с hide.png, върни я оригинална
         if (hiddenImageElement && hiddenImageElement.src.includes('hide.png')) {
             hiddenImageElement.src = originalHiddenImageSrc;
             hiddenImageElement.dataset.name = originalHiddenImageName;
             hiddenImageElement.alt = originalHiddenImageName.replace('.jpg', '');
         }
         
-        // Нулираме референциите за чисто състояние
         hiddenImageElement = null; 
         originalHiddenImageSrc = '';
         originalHiddenImageName = '';
@@ -183,14 +182,13 @@ document.addEventListener('DOMContentLoaded', () => {
     startGameBtn.addEventListener('click', startGame);
     startBtn.addEventListener('click', hideRandomPicture);
     reloadBtn.addEventListener('click', () => {
-        showMessage('', 'info'); // Изчиства съобщението
-        renderGamePics(); // Това ще пресъздаде всички картинки и ще реши проблема със скрита картинка
-        resetGameState(); // Гарантира чисто състояние
+        showMessage('', 'info');
+        renderGamePics();
+        resetGameState();
     });
 
     // --- Първоначална инициализация при зареждане на страницата ---
     updateStartButtonState(); 
-    // ^ Тази функция се извиква веднъж при зареждане на страницата
 
     document.getElementById('controls').classList.add('hidden');
     containerEl.classList.add('hidden');
