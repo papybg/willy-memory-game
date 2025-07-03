@@ -1,325 +1,327 @@
 /* 🌟 Основни стилове и CSS променливи */
 :root {
-    --primary-color: #007bff; /* Основен син цвят */
-    --primary-hover-focus-color: #0056b3; /* Цвят при ховър/фокус */
-    --background-light: #f5f5f5;
-    --background-game-section-1: #e0f7fa; /* Светъл син за горна секция */
-    --background-game-section-2: #f0f4c3; /* Светъл зелен за долна секция */
-    --border-color-dark: #555;
-    --border-color-light: #ccc;
-    --border-color-primary: #007bff;
-    --dashed-border-color: #aed581; /* Този цвят може да не е нужен вече, но го запазваме за border на allPics */
-    --disabled-button-color: #ccc;
-    --text-color-dark: #333;
+    --primary-color: #007bff; /* Основен син цвят */
+    --primary-hover-focus-color: #0056b3; /* Цвят при ховър/фокус */
+    --background-light: #f5f5f5;
+    --background-game-section-1: #e0f7fa; /* Светъл син за горна секция */
+    --background-game-section-2: #f0f4c3; /* Светъл зелен за долна секция */
+    --border-color-dark: #555;
+    --border-color-light: #ccc;
+    --border-color-primary: #007bff;
+    --dashed-border-color: #aed581; /* Този цвят може да не е нужен вече, но го запазваме за border на allPics */
+    --disabled-button-color: #ccc;
+    --text-color-dark: #333;
 
-    /* Нови променливи за съобщенията */
-    --success-color: #28a745; /* Зелен за успех */
-    --error-color: #dc3545;   /* Червен за грешка */
+    /* Нови променливи за съобщенията */
+    --success-color: #28a745; /* Зелен за успех */
+    --error-color: #dc3545;   /* Червен за грешка */
 }
 
 body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 10px;
-  text-align: center;
-  background-color: var(--background-light);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 10vh; /* Намалена височина за да не се налага толкова скрол */
-  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 10px;
+  text-align: center;
+  background-color: var(--background-light);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 10vh; /* Намалена височина за да не се налага толкова скрол */
+  box-sizing: border-box;
 }
 
 h1 {
-  font-size: 2rem;
-  margin: 0.8rem 0;
-  color: var(--text-color-dark);
+  font-size: 2rem;
+  margin: 0.8rem 0;
+  color: var(--text-color-dark);
 }
 
 #gameMessage {
-    margin-bottom: 10px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    min-height: 1.5em;
-    opacity: 0;
-    transform: scale(0.8);
-    transition: opacity 0.5s ease-out, transform 0.5s ease-out, font-size 0.5s ease-out;
-    font-family: 'Comic Sans MS', cursive, sans-serif;
-    color: var(--primary-color);
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    min-height: 1.5em;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out, font-size 0.5s ease-out;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    color: var(--primary-color);
 }
 
 .message-animate {
-    opacity: 1 !important;
-    transform: scale(1) !important;
-    font-size: 2.5rem !important;
+    opacity: 1 !important;
+    transform: scale(1) !important;
+    font-size: 2.5rem !important;
 }
 
 .message-success {
-    color: var(--success-color);
+    color: var(--success-color);
 }
 
 .message-error {
-    color: var(--error-color);
+    color: var(--error-color);
 }
 
 #controls {
-  margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 
 button {
-  padding: 10px 20px;
-  margin: 5px;
-  font-size: 16px;
-  cursor: pointer;
-  border: none;
-  border-radius: 6px;
-  background-color: var(--primary-color);
-  color: white;
-  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  padding: 10px 20px;
+  margin: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--primary-color);
+  color: white;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 button:hover {
-  background-color: var(--primary-hover-focus-color);
+  background-color: var(--primary-hover-focus-color);
 }
 
 button:focus {
-    background-color: var(--primary-hover-focus-color);
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.4);
+    background-color: var(--primary-hover-focus-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.4);
 }
 
 button:disabled {
-  background-color: var(--disabled-button-color);
-  cursor: not-allowed;
+  background-color: var(--disabled-button-color);
+  cursor: not-allowed;
 }
 
 #container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 30px;
-  width: 100%;
-  max-width: 1000px;
-  margin: 10px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  width: 100%;
+  max-width: 1000px;
+  margin: 10px auto;
 }
 
 .game-section {
-    width: 100%;
-    max-width: 800px;
-    border-radius: 15px;
-    padding: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box;
+    width: 100%;
+    max-width: 800px;
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
 }
 
 .game-section h2 {
-    font-size: 1.5rem;
-    color: var(--text-color-dark);
-    margin-top: 0;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--border-color-light);
+    font-size: 1.5rem;
+    color: var(--text-color-dark);
+    margin-top: 0;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color-light);
 }
 
 #gamePics {
-  position: relative; /* КЛЮЧОВА ПРОМЯНА: Задаваме relative за позициониране на наслагващия елемент */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 20px;
-  background-color: var(--background-game-section-1);
-  border: 2px solid var(--border-color-primary);
-  border-radius: 10px;
-  padding: 15px;
-  min-height: 180px;
+  position: relative; /* КЛЮЧОВА ПРОМЯНА: Задаваме relative за позициониране на наслагващия елемент */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  background-color: var(--background-game-section-1);
+  border: 2px solid var(--border-color-primary);
+  border-radius: 10px;
+  padding: 15px;
+  min-height: 180px;
 }
 
 #gamePics img {
-  width: 180px;
-  height: 180px;
-  object-fit: contain;
-  object-position: center;
-  cursor: pointer;
-  border: 2px solid var(--border-color-dark);
-  border-radius: 10px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  object-position: center;
+  cursor: pointer;
+  border: 2px solid var(--border-color-dark);
+  border-radius: 10px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 /* Изцяло нов клас за наслагващата картинка */
 .hide-overlay {
-    position: absolute; /* Позиционираме я над другите елементи */
-    width: 180px; /* Същият размер като картинките */
-    height: 180px;
-    object-fit: contain;
-    object-position: center;
-    border-radius: 10px;
-    /* top и left ще се задават от JS динамично */
-    opacity: 0; /* Започва невидима */
-    visibility: hidden; /* Скрита */
-    transition: opacity 0.5s ease-out; /* Плавна анимация за появяване/изчезване */
-    z-index: 10; /* Да е над другите картинки */
-    cursor: pointer; /* Може да се клика върху нея, ако е нужно */
+    position: absolute; /* Позиционираме я над другите елементи */
+    width: 180px; /* Същият размер като картинките */
+    height: 180px;
+    object-fit: fill; /* <--- Променено от 'contain' на 'fill' */
+    object-position: center;
+    border-radius: 10px;
+    /* top и left ще се задават от JS динамично */
+    opacity: 0; /* Започва невидима */
+    visibility: hidden; /* Скрита */
+    transition: opacity 0.5s ease-out; /* Плавна анимация за появяване/изчезване */
+    z-index: 10; /* Да е над другите картинки */
+    cursor: pointer; /* Може да се клика върху нея, ако е нужно */
 }
 
 .hide-overlay.is-visible {
-    opacity: 1;
-    visibility: visible;
+    opacity: 1;
+    visibility: visible;
 }
 
 
 #gamePics img:hover,
 #gamePics img:focus {
-  transform: scale(1.05);
-  box-shadow: 0 0 10px rgba(0, 123, 255, 0.6);
-  outline: none;
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.6);
+  outline: none;
 }
 
 #allPics {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  background-color: var(--background-game-section-2);
-  border: 2px dashed var(--dashed-border-color);
-  border-radius: 10px;
-  padding: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  background-color: var(--background-game-section-2);
+  border: 2px dashed var(--dashed-border-color);
+  border-radius: 10px;
+  padding: 15px;
 }
 
 #allPics img {
-  width: 120px;
-  height: 120px;
-  object-fit: contain;
-  object-position: center;
-  cursor: pointer;
-  border: 2px solid var(--border-color-dark);
-  border-radius: 10px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  object-position: center;
+  cursor: pointer;
+  border: 2px solid var(--border-color-dark);
+  border-radius: 10px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 #allPics img:hover,
 #allPics img:focus {
-  transform: scale(1.05);
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
-  outline: none;
+  transform: scale(1.05);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+  outline: none;
 }
 
 #optionsContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin: 1rem auto;
-    font-size: 1.1rem;
-    padding: 15px;
-    border: 1px solid var(--border-color-light);
-    border-radius: 10px;
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 1rem auto;
+    font-size: 1.1rem;
+    padding: 15px;
+    border: 1px solid var(--border-color-light);
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
 #themeOptions label, #countOptions label {
-    display: inline-block;
-    margin-bottom: 5px;
-    cursor: pointer;
+    display: inline-block;
+    margin-bottom: 5px;
+    cursor: pointer;
 }
 
 .hidden {
-    display: none !important;
+    display: none !important;
 }
 
 /* 📱 Адаптация за таблети */
 @media (max-width: 768px) {
-  h1 {
-    font-size: 1.6rem;
-    margin: 0.6rem 0;
-  }
-  .game-section h2 {
-      font-size: 1.2rem;
-  }
-  #gameMessage {
-      font-size: 1.1rem;
-      margin-bottom: 8px;
-  }
-  #gamePics img {
-    width: 150px;
-    height: 150px;
-  }
-  .hide-overlay { /* Адаптираме размера и за overlay-я */
-    width: 150px;
-    height: 150px;
-  }
-  #allPics img {
-    width: 100px;
-    height: 100px;
-  }
-  button {
-    font-size: 0.8rem;
-    padding: 7px 14px;
-  }
-  #gamePics, #allPics {
-      gap: 10px;
-      padding: 10px;
-  }
-  #container {
-      gap: 20px;
-  }
-  #optionsContainer {
-      font-size: 0.95rem;
-      padding: 12px;
-      gap: 10px;
-  }
+  h1 {
+    font-size: 1.6rem;
+    margin: 0.6rem 0;
+  }
+  .game-section h2 {
+      font-size: 1.2rem;
+  }
+  #gameMessage {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+  }
+  #gamePics img {
+    width: 150px;
+    height: 150px;
+  }
+  .hide-overlay { /* Адаптираме размера и за overlay-я */
+    width: 150px;
+    height: 150px;
+    object-fit: fill; /* <--- Променено от 'contain' на 'fill' */
+  }
+  #allPics img {
+    width: 100px;
+    height: 100px;
+  }
+  button {
+    font-size: 0.8rem;
+    padding: 7px 14px;
+  }
+  #gamePics, #allPics {
+      gap: 10px;
+      padding: 10px;
+  }
+  #container {
+      gap: 20px;
+  }
+  #optionsContainer {
+      font-size: 0.95rem;
+      padding: 12px;
+      gap: 10px;
+  }
 }
 
 /* 📱 Адаптация за телефони */
 @media (max-width: 480px) {
-  body {
-      padding: 5px;
-  }
-  h1 {
-    font-size: 1.3rem;
-    margin: 0.5rem 0;
-  }
-  .game-section h2 {
-      font-size: 1.1rem;
-      margin-bottom: 10px;
-  }
-  #gameMessage {
-      font-size: 0.9rem;
-      margin-bottom: 5px;
-  }
-  #gamePics, #allPics {
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    padding: 5px;
-  }
-  #gamePics img {
-    width: 70px;
-    height: 70px;
-  }
-  .hide-overlay { /* Адаптираме размера и за overlay-я */
-    width: 70px;
-    height: 70px;
-  }
-  #allPics img {
-    width: 50px;
-    height: 50px;
-  }
-  #container {
-      gap: 15px;
-      margin: 5px auto;
-  }
-  button {
-    font-size: 0.75rem;
-    padding: 5px 10px;
-  }
-  #optionsContainer {
-      font-size: 0.85rem;
-      padding: 8px;
-      gap: 8px;
-  }
-  .message-animate {
-    font-size: 1.8rem !important;
-  }
+  body {
+      padding: 5px;
+  }
+  h1 {
+    font-size: 1.3rem;
+    margin: 0.5rem 0;
+  }
+  .game-section h2 {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+  }
+  #gameMessage {
+      font-size: 0.9rem;
+      margin-bottom: 5px;
+  }
+  #gamePics, #allPics {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 5px;
+  }
+  #gamePics img {
+    width: 70px;
+    height: 70px;
+  }
+  .hide-overlay { /* Адаптираме размера и за overlay-я */
+    width: 70px;
+    height: 70px;
+    object-fit: fill; /* <--- Променено от 'contain' на 'fill' */
+  }
+  #allPics img {
+    width: 50px;
+    height: 50px;
+  }
+  #container {
+      gap: 15px;
+      margin: 5px auto;
+  }
+  button {
+    font-size: 0.75rem;
+    padding: 5px 10px;
+  }
+  #optionsContainer {
+      font-size: 0.85rem;
+      padding: 8px;
+      gap: 8px;
+  }
+  .message-animate {
+    font-size: 1.8rem !important;
+  }
 }
