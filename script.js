@@ -17,25 +17,41 @@ document.addEventListener('DOMContentLoaded', () => {
     const messageDisplay = document.getElementById('gameMessage');
     const startBtn = document.getElementById('start');
     const reloadBtn = document.getElementById('reload');
+    const backToMenuBtn = document.getElementById('backToMenu');
     const allPicsEl = document.getElementById('allPics');
     const gamePicsEl = document.getElementById('gamePics');
     const containerEl = document.getElementById('container');
+    const controlsEl = document.getElementById('controls');
 
-    // 🎯 Променливи за състоянието на играта
-    let currentThemeImages = [];
-    let numberOfPics = 0;
-    let selectedGamePics = [];
-    let hiddenImageElement = null;
-    let hiddenIndex = null;
-    let originalHiddenImageSrc = '';
-    let originalHiddenImageName = '';
-    let awaitingChoice = false;
+    // 🎯 Променливи за състоянието на играта (групирани в обект)
+    const gameState = {
+        currentThemeImages: [],
+        numberOfPics: 0,
+        selectedGamePics: [],
+        hiddenImageElement: null,
+        originalHiddenImageSrc: '',
+        originalHiddenImageName: '',
+        awaitingChoice: false,
+    };
 
-    // НОВО: Аудио елементи за успех и грешка
+    // Аудио елементи за успех и грешка
     const bravoAudio = new Audio('audio/bravo_uily.wav'); 
-    const opitaiPakAudio = new Audio('audio/opitaj_pak.wav'); // НОВО: Пътят към новия WAV файл
+    const opitaiPakAudio = new Audio('audio/opitaj_pak.wav');
 
     // --- Функции ---
+
+    /**
+     * Алгоритъм на Fisher-Yates за случайно разбъркване на масив.
+     * @param {Array} array - Масивът за разбъркване.
+     * @returns {Array} Разбърканият масив.
+     */
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]]; // ES6 swap
+        }
+        return array;
+    }
 
     function updateStartButtonState() {
         const themeSelected = Array.from(themeRadios).some(r => r.checked);
@@ -45,16 +61,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function startGame() {
         const selectedTheme = document.querySelector('input[name="theme"]:checked').value;
-        numberOfPics = parseInt(document.querySelector('input[name="count"]:checked').value);
-
-        currentThemeImages = ALL_THEMES[selectedTheme];
+        gameState.numberOfPics = parseInt(document.querySelector('input[name="count"]:checked').value);
+        gameState.currentThemeImages = ALL_THEMES[selectedTheme];
 
         gameTitleEl.textContent = `Познай ${selectedTheme.replace('_', ' ').toUpperCase()}!`;
         
         optionsContainer.classList.add('hidden');
-        startGameBtn.classList.add('hidden');
-
-        document.getElementById('controls').classList.remove('hidden');
+        controlsEl.classList.remove('hidden');
         containerEl.classList.remove('hidden');
 
         renderGamePics();
@@ -64,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderAllPics() {
         allPicsEl.innerHTML = '';
-        currentThemeImages.forEach(name => {
+        gameState.currentThemeImages.forEach(name => {
             const img = document.createElement('img');
             img.src = 'images/' + name;
             img.dataset.name = name;
@@ -76,11 +89,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderGamePics() {
         gamePicsEl.innerHTML = ''; 
+        const shuffledImages = shuffleArray([...gameState.currentThemeImages]);
+        gameState.selectedGamePics = shuffledImages.slice(0, gameState.numberOfPics);
 
-        const shuffledImages = [...currentThemeImages].sort(() => 0.5 - Math.random());
-        selectedGamePics = shuffledImages.slice(0, numberOfPics);
-
-        selectedGamePics.forEach((name, idx) => {
+        gameState.selectedGamePics.forEach((name, idx) => {
             const img = document.createElement('img');
             img.src = 'images/' + name;
             img.dataset.idx = idx;
@@ -91,83 +103,72 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function hideRandomPicture() {
-        if (awaitingChoice) return;
+        if (gameState.awaitingChoice) return;
+        restoreHiddenImage(); // Възстановява предишна скрита, ако има
 
-        if (hiddenImageElement && hiddenImageElement.src.includes('hide.png')) {
-            hiddenImageElement.src = originalHiddenImageSrc;
-            hiddenImageElement.dataset.name = originalHiddenImageName;
-            hiddenImageElement.alt = originalHiddenImageName.replace('.jpg', '');
-        }
+        const hiddenIndex = Math.floor(Math.random() * gameState.numberOfPics);
+        gameState.hiddenImageElement = gamePicsEl.querySelectorAll('img')[hiddenIndex]; 
 
-        hiddenIndex = Math.floor(Math.random() * numberOfPics);
-        hiddenImageElement = gamePicsEl.querySelectorAll('img')[hiddenIndex]; 
+        gameState.originalHiddenImageSrc = gameState.hiddenImageElement.src;
+        gameState.originalHiddenImageName = gameState.hiddenImageElement.dataset.name;
 
-        originalHiddenImageSrc = hiddenImageElement.src;
-        originalHiddenImageName = hiddenImageElement.dataset.name;
-
-        hiddenImageElement.src = 'images/hide.png';
-        hiddenImageElement.dataset.name = 'hide.png';
-        hiddenImageElement.alt = 'Скрита картинка';
+        gameState.hiddenImageElement.src = 'images/hide.png';
+        gameState.hiddenImageElement.dataset.name = 'hide.png';
+        gameState.hiddenImageElement.alt = 'Скрита картинка';
         
-        awaitingChoice = true;
+        gameState.awaitingChoice = true;
         startBtn.classList.add('hidden');
         showMessage('Познай кое липсва!', 'info');
     }
 
     function chooseHandler(e) {
-        if (!awaitingChoice) return;
+        if (!gameState.awaitingChoice) return;
 
         const chosen = e.target.dataset.name;
-        const hidden = originalHiddenImageName; 
+        const hidden = gameState.originalHiddenImageName; 
 
         if (chosen === hidden) {
             showMessage('Браво, Уйли!', 'success');
-            
             bravoAudio.currentTime = 0; 
             bravoAudio.play().catch(e => console.error("Error playing audio:", e));
             
-            if (hiddenImageElement) {
-                hiddenImageElement.src = originalHiddenImageSrc;
-                hiddenImageElement.dataset.name = originalHiddenImageName;
-                hiddenImageElement.alt = originalHiddenImageName.replace('.jpg', '');
-            }
+            restoreHiddenImage();
 
-            awaitingChoice = false;
+            gameState.awaitingChoice = false;
             reloadBtn.classList.remove('hidden');
             startBtn.classList.add('hidden');
         } else {
             showMessage('Опитай пак!', 'error');
-            // НОВО: Възпроизвеждане на аудиото за грешен отговор
             opitaiPakAudio.currentTime = 0; 
             opitaiPakAudio.play().catch(e => console.error("Error playing audio:", e));
         }
     }
 
     function showMessage(text, type) {
-        messageDisplay.classList.remove('message-animate', 'message-success', 'message-error');
-        messageDisplay.style.opacity = 0;
-        messageDisplay.style.transform = 'scale(0.8)';
-
+        messageDisplay.className = 'gameMessage'; // Нулиране на класовете
         messageDisplay.textContent = text;
         
+        // Добавяне на класовете с малко закъснение за да се задейства transition
         setTimeout(() => {
             messageDisplay.classList.add('message-animate', `message-${type}`);
-        }, 50);
+        }, 10);
+    }
+
+    function restoreHiddenImage() {
+        if (gameState.hiddenImageElement && gameState.originalHiddenImageSrc) {
+            gameState.hiddenImageElement.src = gameState.originalHiddenImageSrc;
+            gameState.hiddenImageElement.dataset.name = gameState.originalHiddenImageName;
+            gameState.hiddenImageElement.alt = gameState.originalHiddenImageName.replace('.jpg', '');
+        }
     }
 
     function resetGameState() {
-        awaitingChoice = false;
-        hiddenIndex = null;
+        restoreHiddenImage();
         
-        if (hiddenImageElement && hiddenImageElement.src.includes('hide.png')) {
-            hiddenImageElement.src = originalHiddenImageSrc;
-            hiddenImageElement.dataset.name = originalHiddenImageName;
-            hiddenImageElement.alt = originalHiddenImageName.replace('.jpg', '');
-        }
-        
-        hiddenImageElement = null; 
-        originalHiddenImageSrc = '';
-        originalHiddenImageName = '';
+        gameState.awaitingChoice = false;
+        gameState.hiddenImageElement = null; 
+        gameState.originalHiddenImageSrc = '';
+        gameState.originalHiddenImageName = '';
 
         showMessage('Натисни "СКРИЙ КАРТИНА" за да започнеш.', 'info');
         
@@ -176,20 +177,25 @@ document.addEventListener('DOMContentLoaded', () => {
         startBtn.disabled = false;
     }
 
+    function goBackToMenu() {
+        gameTitleEl.textContent = 'Познай КАРТИНКАТА!';
+        controlsEl.classList.add('hidden');
+        containerEl.classList.add('hidden');
+        optionsContainer.classList.remove('hidden');
+        showMessage('', 'info'); // Изчистване на съобщението
+    }
+
     // --- Слушатели на събития ---
     themeRadios.forEach(r => r.addEventListener('change', updateStartButtonState));
     countRadios.forEach(r => r.addEventListener('change', updateStartButtonState));
     startGameBtn.addEventListener('click', startGame);
     startBtn.addEventListener('click', hideRandomPicture);
     reloadBtn.addEventListener('click', () => {
-        showMessage('', 'info');
         renderGamePics();
         resetGameState();
     });
+    backToMenuBtn.addEventListener('click', goBackToMenu);
 
-    // --- Първоначална инициализация при зареждане на страницата ---
+    // --- Първоначална инициализация ---
     updateStartButtonState(); 
-
-    document.getElementById('controls').classList.add('hidden');
-    containerEl.classList.add('hidden');
 });
