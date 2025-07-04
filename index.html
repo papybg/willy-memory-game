@@ -12,30 +12,35 @@
 
     
     <div id="optionsContainer">
-        <h2>МЕНЮ</h2> 
-        <p class="option-line-1">Избери тема:</p> 
-        <div id="themeOptions">
-            <label><input type="radio" name="theme" value="превозни_средства"> Превозни средства</label>
-            <label class="theme-animals"><input type="radio" name="theme" value="animals"> Животни</label>
-            <label class="theme-flowers"><input type="radio" name="theme" value="flowers"> Цветя</label>
-        </div>
-        <p class="option-line-2">Избери брой картинки:</p> 
-        <div id="countOptions">
-            <label><input type="radio" name="count" value="2"> 2</label>
-            <label><input type="radio" name="count" value="3" checked> 3</label>
-            <label><input type="radio" name="count" value="4"> 4</label>
-            <label><input type="radio" name="count" value="5"> 5</label>
-        </div>
+        <h2>МЕНЮ</h2>
+        <fieldset>
+            <legend class="option-line-1">Избери тема:</legend>
+            <div id="themeOptions">
+                <label><input type="radio" name="theme" value="превозни_средства"> Превозни средства</label>
+                <label class="theme-animals"><input type="radio" name="theme" value="animals"> Животни</label>
+                <label class="theme-flowers"><input type="radio" name="theme" value="flowers"> Цветя</label>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend class="option-line-2">Избери брой картинки:</legend>
+            <div id="countOptions">
+                <label><input type="radio" name="count" value="2"> 2</label>
+                <label><input type="radio" name="count" value="3" checked> 3</label>
+                <label><input type="radio" name="count" value="4"> 4</label>
+                <label><input type="radio" name="count" value="5"> 5</label>
+            </div>
+        </fieldset>
         <button id="startGameBtn" disabled class="option-line-3">Започни играта</button> 
     </div>
 
     
-    <div id="gameMessage"></div>
+    <div id="gameMessage" class="message-hidden"></div>
 
     
     <div id="controls" class="hidden">
         <button id="start">СКРИЙ КАРТИНА</button>
         <button id="reload" class="hidden">НОВА ИГРА</button>
+        <button id="backToMenu">ОБРАТНО В МЕНЮТО</button>
     </div>
 
     
