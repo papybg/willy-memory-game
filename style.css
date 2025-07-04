@@ -23,7 +23,7 @@ body {
   padding: 10px;
   text-align: center;
   background-color: var(--background-light);
-  background-image: url('images/fon1.jpg'); /* <<< НОВ ФОН */
+  background-image: url('images/fon1.jpg');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -37,11 +37,12 @@ body {
 
 /* 🌟 Стилове за заглавието на играта (#gameTitle) */
 #gameTitle {
-  font-size: 3rem; 
+  font-size: 7rem; /* <<< УВЕЛИЧЕН РАЗМЕР */
   font-weight: bold; 
+  line-height: 1; /* <<< НАМАЛЕНО РАЗСТОЯНИЕ МЕЖДУ РЕДОВЕТЕ */
   margin: 0.8rem 0;
   color: #fff;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+  text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
   transition: all 0.5s ease-out; 
 }
 
@@ -268,7 +269,7 @@ button:disabled {
 
 /* 📱 Адаптация за таблети */
 @media (max-width: 768px) {
-  #gameTitle { font-size: 2.5rem; }
+  #gameTitle { font-size: 5rem; }
   .game-section h2 { font-size: 1.2rem; }
   #gameMessage { font-size: 1.1rem; margin-bottom: 8px; }
   #gamePics img { width: 150px; height: 150px; }
@@ -284,7 +285,7 @@ button:disabled {
 /* 📱 Адаптация за телефони */
 @media (max-width: 480px) {
   body { padding: 5px; }
-  #gameTitle { font-size: 1.8rem; }
+  #gameTitle { font-size: 3.5rem; }
   .game-section h2 { font-size: 1.1rem; margin-bottom: 10px; }
   #gameMessage { font-size: 0.9rem; margin-bottom: 5px; }
   #gamePics, #allPics { flex-direction: row; align-items: center; justify-content: center; gap: 5px; padding: 5px; }
