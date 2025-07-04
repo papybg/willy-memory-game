@@ -40,6 +40,7 @@ h1 {
 }
 
 /* 🌟 Цветове за текстовите редове в опциите */
+/* Тези класове се прилагат от HTML, не са част от логиката на бутона */
 #optionsContainer .option-line-1 {
     color: red;
     font-weight: bold;
@@ -54,7 +55,6 @@ h1 {
 #startGameBtn.option-line-3 {
     color: green; /* Цветен текст на бутона - ТЪМНО ЗЕЛЕН */
     font-weight: bold;
-    background-color: var(--primary-color); /* Можете да запазите или промените фона */
 }
 
 /* 🌟 Нови стилове за конкретните теми */
@@ -151,35 +151,60 @@ h1 {
     transform: translate(-50%, -50%);
 }
 
-#startGameBtn {
+/* Глобален стил за бутоните - важно е да е преди специфичния за startGameBtn */
+button {
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
     background-color: var(--primary-color);
-    color: white; /* Този цвят се презаписва от option-line-3 */
+    color: white; /* Дефолтен цвят, който може да бъде презаписан */
+    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease; /* Добавяме transform */
+}
+
+button:hover {
+  background-color: var(--primary-hover-focus-color);
+}
+
+button:focus {
+    background-color: var(--primary-hover-focus-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.4);
+}
+
+button:disabled {
+  background-color: var(--disabled-button-color);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Специфичен стил за startGameBtn - ще презапише общия button стил за background-color и color,
+но :hover и :focus ще работят коректно, ако са по-специфични или дефинирани след това. */
+#startGameBtn {
+    background-color: var(--primary-color); /* Може да бъде презаписано от .option-line-3 */
     padding: 12px 25px;
     border: none;
     border-radius: 8px;
     font-size: 1.1em;
     cursor: pointer;
-    transition: background-color 0.2s, transform 0.2s;
+    /* transition вече е дефиниран в общия button стил */
     align-self: center; /* Центрира бутона */
 }
 
 #startGameBtn:not([disabled]):hover {
     background-color: #E6F7FF; /* ПРОМЯНА: Много светъл син цвят за добър контраст с тъмнозелен текст */
-    transform: translateY(-2px);
+    transform: translateY(-2px); /* Анимация */
 }
 
-#startGameBtn:focus { /* НОВО: Добавяме стил и за фокус */
+#startGameBtn:focus {
     background-color: #E6F7FF; /* Същият много светъл син цвят */
     outline: none;
     box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.4);
 }
 
-#startGameBtn:disabled {
-    background-color: var(--disabled-button-color);
-    cursor: not-allowed;
-    opacity: 0.7;
-}
-
+/* Стил за gameMessage */
 #gameMessage {
     margin-top: 20px;
     font-size: 1.8em; /* ПРОМЯНА: Увеличен размер на шрифта по подразбиране */
@@ -195,6 +220,7 @@ h1 {
     text-align: center; /* НОВО: Гарантираме центриране на текста */
     padding: 5px; /* НОВО: Добавяме малко вътрешен отстъп */
     box-sizing: border-box; /* НОВО: За да не се разширява с padding-а */
+    font-family: Arial, sans-serif; /* Връщаме стандартния шрифт, премахваме Comic Sans */
 }
 
 #gameMessage.message-animate {
@@ -217,6 +243,7 @@ h1 {
     gap: 15px;
 }
 
+/* Стил за бутоните в controls секцията, ако искате да са различни от startGameBtn */
 #controls button {
     background-color: var(--primary-color);
     color: white;
@@ -248,7 +275,9 @@ h1 {
     padding: 20px;
     border-radius: 15px;
     background-color: rgba(255, 255, 255, 0.85); /* Полупрозрачен бял фон */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    max-width: 900px; /* За да не са твърде широки секциите */
+    width: 90%;
     box-sizing: border-box;
 }
 
@@ -289,7 +318,7 @@ h1 {
 }
 
 /* Overlay за скриване на картинката */
-.hide-overlay { /* Променено от hidden-pic-overlay */
+.hide-overlay {
     position: absolute;
     width: 180px; /* Трябва да е същата ширина като картинките */
     height: 180px; /* Трябва да е същата височина като картинките */
@@ -300,7 +329,7 @@ h1 {
     opacity: 0; /* Скрит по подразбиране */
     transition: opacity 0.3s ease-in-out;
     pointer-events: none; /* Позволява клик през овърлея */
-    z-index: 10; /* НОВО: За да е над картинките */
+    z-index: 10; /* За да е над картинките */
 }
 
 .hide-overlay.is-visible {
