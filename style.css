@@ -22,7 +22,6 @@ body {
   margin: 0;
   padding: 10px;
   text-align: center;
-  /* background-color: var(--background-light); ТОВА ВЕЧЕ НЯМА НУЖДА ОТ НЕГО, ТЪЙ КАТО КЛАСОВЕТЕ ЩЕ ЗАДАВАТ ФОНА */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -34,10 +33,10 @@ h1 {
   color: var(--text-color-dark);
   margin: 1rem 0;
   font-size: 2rem;
-  padding: 10px 20px; /* Добавяме паддинг */
-  border-radius: 10px; /* Заобляме ъглите */
-  background-color: rgba(255, 255, 255, 0.7); /* Полупрозрачен бял фон */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Лека сянка */
+  padding: 10px 20px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* 🌟 Цветове за текстовите редове в опциите */
@@ -53,43 +52,43 @@ h1 {
 }
 /* За бутона, променяме цвета на текста */
 #startGameBtn.option-line-3 {
-    color: green; /* Цветен текст на бутона */
+    color: green;
     font-weight: bold;
-    background-color: var(--primary-color); /* Можете да запазите или промените фона */
+    background-color: var(--primary-color);
 }
 
 /* 🌟 Нови стилове за конкретните теми */
 #optionsContainer .theme-animals {
-    color: brown; /* Кафяв цвят за "Животни" */
+    color: brown;
     font-weight: bold;
 }
 
 #optionsContainer .theme-flowers {
-    color: green; /* Зелен цвят за "Цветя" */
+    color: green;
     font-weight: bold;
 }
 
 
 #optionsContainer {
-  background-color: rgba(255, 255, 255, 0.85); /* Полупрозрачен бял фон */
+  background-color: rgba(255, 255, 255, 0.85);
   padding: 20px;
   border-radius: 15px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
-  gap: 15px; /* Разстояние между елементите в контейнера */
+  gap: 15px;
   margin-top: 20px;
-  max-width: 400px; /* Ограничаваме ширината */
-  width: 90%; /* Адаптивна ширина */
-  align-items: flex-start; /* Изравняваме елементите вляво */
-  text-align: left; /* Изравняваме текста вляво */
+  max-width: 400px;
+  width: 90%;
+  align-items: flex-start;
+  text-align: left;
 }
 
 #optionsContainer h2 {
     color: var(--primary-color);
     margin-top: 0;
     margin-bottom: 10px;
-    align-self: center; /* Центрира заглавието */
+    align-self: center;
 }
 
 #optionsContainer p {
@@ -100,8 +99,8 @@ h1 {
 #themeOptions,
 #countOptions {
     display: flex;
-    flex-wrap: wrap; /* Позволява преминаване на нов ред за малки екрани */
-    gap: 10px; /* Разстояние между радио бутоните */
+    flex-wrap: wrap;
+    gap: 10px;
     margin-bottom: 10px;
 }
 
@@ -126,7 +125,7 @@ h1 {
 
 #themeOptions input[type="radio"],
 #countOptions input[type="radio"] {
-    appearance: none; /* Скрива стандартния радио бутон */
+    appearance: none;
     width: 16px;
     height: 16px;
     border: 2px solid var(--primary-color);
@@ -134,7 +133,7 @@ h1 {
     position: relative;
     cursor: pointer;
     outline: none;
-    flex-shrink: 0; /* Предотвратява свиване */
+    flex-shrink: 0;
 }
 
 #themeOptions input[type="radio"]:checked::before,
@@ -160,7 +159,7 @@ h1 {
     font-size: 1.1em;
     cursor: pointer;
     transition: background-color 0.2s, transform 0.2s;
-    align-self: center; /* Центрира бутона */
+    align-self: center;
 }
 
 #startGameBtn:not([disabled]):hover {
@@ -179,10 +178,10 @@ h1 {
     font-size: 1.5em;
     font-weight: bold;
     color: var(--text-color-dark);
-    min-height: 1.5em; /* За да запази височина, дори когато е празно */
-    opacity: 0; /* Скриваме по подразбиране */
-    transform: scale(0.8); /* Започваме малко смалено */
-    transition: opacity 0.5s ease-out, transform 0.5s ease-out; /* Анимация */
+    min-height: 1.5em;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
 }
 
 #gameMessage.message-animate {
@@ -224,7 +223,7 @@ h1 {
     flex-direction: column;
     align-items: center;
     margin-top: 20px;
-    gap: 30px; /* Разстояние между двете секции с картинки */
+    gap: 30px;
 }
 
 .game-section {
@@ -234,7 +233,7 @@ h1 {
     gap: 20px;
     padding: 20px;
     border-radius: 15px;
-    background-color: rgba(255, 255, 255, 0.85); /* Полупрозрачен бял фон */
+    background-color: rgba(255, 255, 255, 0.85);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     max-width: 900px;
     width: 90%;
@@ -265,18 +264,18 @@ h1 {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('images/hide.png'); /* Изображението, което скрива */
+    background-image: url('images/hide.png');
     background-size: cover;
     background-position: center;
-    border-radius: 10px; /* Заобляме ъглите като картинката */
-    opacity: 0; /* Скрит по подразбиране */
+    border-radius: 10px;
+    opacity: 0;
     transition: opacity 0.3s ease-in-out;
-    pointer-events: none; /* Позволява клик през овърлея */
+    pointer-events: none;
 }
 
 .hidden-pic-overlay.is-visible {
     opacity: 1;
-    pointer-events: all; /* Връща клик събитията, когато е видим */
+    pointer-events: all;
 }
 
 
@@ -286,19 +285,14 @@ h1 {
 
 /* --- Фонове за страниците --- */
 
-/* Стартова страница с менюто - АКТУАЛИЗИРАН ФОН */
+/* Стартова страница с менюто - АКТУАЛИЗИРАН ФОН (без градиент засега) */
 body.start-bg {
     background-image: url('images/fon1.jpg'); /* Вашето изображение с вълни */
     background-size: cover; /* За да покрие целия екран */
     background-position: center center; /* За да е центрирано */
     background-repeat: no-repeat; /* Да не се повтаря */
     background-attachment: fixed; /* Да стои фиксирано при скрол */
-    
-    /* Добавяме градиента ОТГОРЕ на изображението, като използваме multiple backgrounds */
-    background: linear-gradient(rgba(179, 229, 252, 0.7), rgba(178, 255, 89, 0.7)), /* Бледосиньо към бледозелено с прозрачност */
-                url('images/fon1.jpg') no-repeat center center fixed; /* Изображението с вълни */
-    background-size: cover; /* Прилага се за всички фонове */
-    transition: background 0.8s ease-in-out; /* Плавен преход между фоновете */
+    transition: background 0.8s ease-in-out; /* Плавен преход */
 }
 
 
