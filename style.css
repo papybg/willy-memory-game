@@ -29,22 +29,28 @@ body {
   background-attachment: fixed;
   display: flex;
   flex-direction: column;
-  align-items: center; 
-  justify-content: center; 
+  align-items: center;
+  justify-content: flex-start; /* <<< ПРОМЯНА: Подравняване в горната част */
+  padding-top: 2rem; /* <<< ПРОМЯНА: Малко разстояние отгоре */
   min-height: 100vh;
   box-sizing: border-box;
 }
 
 /* 🌟 Стилове за заглавието на играта (#gameTitle) */
 #gameTitle {
-  font-size: 6.5rem; /* Намален размер за PC */
-  font-weight: bold; 
-  line-height: 1; 
+  font-size: 6.5rem;
+  font-weight: bold;
+  line-height: 1;
   margin: 0.8rem 0;
   color: #fff;
   text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
-  transition: all 0.5s ease-out; 
+  transition: all 0.5s ease-out;
 }
+/* НОВ СТИЛ за дълги заглавия */
+#gameTitle.title-long {
+    font-size: 5rem;
+}
+
 
 #gameMessage {
     margin-bottom: 10px;
@@ -201,13 +207,13 @@ button:disabled {
     gap: 15px;
     margin: 1rem auto;
     font-size: 1.1rem;
-    padding: 25px; 
+    padding: 25px;
     border: 1px solid var(--border-color-light);
     border-radius: 10px;
     background-color: rgba(255, 255, 255, 0.9); /* Леко прозрачен фон */
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
-    width: 90%; 
-    max-width: 400px; 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    width: 90%;
+    max-width: 400px;
 }
 
 #optionsContainer fieldset {
@@ -241,9 +247,9 @@ button:disabled {
     color: blue;
 }
 #startGameBtn.option-line-3 {
-    color: green; 
+    color: green;
     font-weight: bold;
-    background-color: var(--primary-color); 
+    background-color: var(--primary-color);
 }
 
 #themeOptions label, #countOptions label {
@@ -254,13 +260,13 @@ button:disabled {
 }
 
 #themeOptions .theme-animals {
-    color: brown; 
-    font-weight: bold; 
+    color: brown;
+    font-weight: bold;
 }
 
 #themeOptions .theme-flowers {
-    color: green; 
-    font-weight: bold; 
+    color: green;
+    font-weight: bold;
 }
 
 .hidden {
@@ -269,7 +275,8 @@ button:disabled {
 
 /* 📱 Адаптация за таблети */
 @media (max-width: 768px) {
-  #gameTitle { font-size: 4.5rem; } /* <<< КОРИГИРАН РАЗМЕР ЗА ТАБЛЕТИ */
+  #gameTitle { font-size: 4.5rem; }
+  #gameTitle.title-long { font-size: 3.5rem; }
   .game-section h2 { font-size: 1.2rem; }
   #gameMessage { font-size: 1.1rem; margin-bottom: 8px; }
   #gamePics img { width: 150px; height: 150px; }
@@ -284,7 +291,8 @@ button:disabled {
 
 /* 📱 Адаптация за телефони */
 @media (max-width: 480px) {
-  #gameTitle { font-size: 3.2rem; } /* <<< КОРИГИРАН РАЗМЕР ЗА ТЕЛЕФОНИ */
+  #gameTitle { font-size: 3.2rem; }
+  #gameTitle.title-long { font-size: 2.5rem; }
   .game-section h2 { font-size: 1.1rem; margin-bottom: 10px; }
   #gameMessage { font-size: 0.9rem; margin-bottom: 5px; }
   #gamePics, #allPics { flex-direction: row; align-items: center; justify-content: center; gap: 5px; padding: 5px; }
