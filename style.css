@@ -1,0 +1,393 @@
+/* 🌟 Основни стилове и CSS променливи */
+:root {
+    --primary-color: #007bff; /* Основен син цвят */
+    --primary-hover-focus-color: #0056b3; /* Цвят при ховър/фокус */
+    --background-light: #f5f5f5;
+    --background-game-section-1: #e0f7fa; /* Светъл син за горна секция */
+    --background-game-section-2: #f0f4c3; /* Светъл зелен за долна секция */
+    --border-color-dark: #555;
+    --border-color-light: #ccc;
+    --border-color-primary: #007bff;
+    --dashed-border-color: #aed581;
+    --disabled-button-color: #ccc;
+    --text-color-dark: #333;
+
+    /* Нови променливи за съобщенията */
+    --success-color: #28a745; /* Зелен за успех */
+    --error-color: #dc3545;   /* Червен за грешка */
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 10px;
+  text-align: center;
+  /* background-color: var(--background-light); ТОВА ВЕЧЕ НЯМА НУЖДА ОТ НЕГО, ТЪЙ КАТО КЛАСОВЕТЕ ЩЕ ЗАДАВАТ ФОНА */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+h1 {
+  color: var(--text-color-dark);
+  margin: 1rem 0;
+  font-size: 2rem;
+  padding: 10px 20px; /* Добавяме паддинг */
+  border-radius: 10px; /* Заобляме ъглите */
+  background-color: rgba(255, 255, 255, 0.7); /* Полупрозрачен бял фон */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Лека сянка */
+}
+
+/* 🌟 Цветове за текстовите редове в опциите */
+#optionsContainer .option-line-1 {
+    color: red;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+#optionsContainer .option-line-2 {
+    color: blue;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+/* За бутона, променяме цвета на текста */
+#startGameBtn.option-line-3 {
+    color: green; /* Цветен текст на бутона */
+    font-weight: bold;
+    background-color: var(--primary-color); /* Можете да запазите или промените фона */
+}
+
+/* 🌟 Нови стилове за конкретните теми */
+#optionsContainer .theme-animals {
+    color: brown; /* Кафяв цвят за "Животни" */
+    font-weight: bold;
+}
+
+#optionsContainer .theme-flowers {
+    color: green; /* Зелен цвят за "Цветя" */
+    font-weight: bold;
+}
+
+
+#optionsContainer {
+  background-color: rgba(255, 255, 255, 0.85); /* Полупрозрачен бял фон */
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Разстояние между елементите в контейнера */
+  margin-top: 20px;
+  max-width: 400px; /* Ограничаваме ширината */
+  width: 90%; /* Адаптивна ширина */
+  align-items: flex-start; /* Изравняваме елементите вляво */
+  text-align: left; /* Изравняваме текста вляво */
+}
+
+#optionsContainer h2 {
+    color: var(--primary-color);
+    margin-top: 0;
+    margin-bottom: 10px;
+    align-self: center; /* Центрира заглавието */
+}
+
+#optionsContainer p {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+#themeOptions,
+#countOptions {
+    display: flex;
+    flex-wrap: wrap; /* Позволява преминаване на нов ред за малки екрани */
+    gap: 10px; /* Разстояние между радио бутоните */
+    margin-bottom: 10px;
+}
+
+#themeOptions label,
+#countOptions label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    background-color: #f0f0f0;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color-light);
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+#themeOptions label:hover,
+#countOptions label:hover {
+    background-color: #e0e0e0;
+    border-color: var(--primary-color);
+}
+
+#themeOptions input[type="radio"],
+#countOptions input[type="radio"] {
+    appearance: none; /* Скрива стандартния радио бутон */
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--primary-color);
+    border-radius: 50%;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    flex-shrink: 0; /* Предотвратява свиване */
+}
+
+#themeOptions input[type="radio"]:checked::before,
+#countOptions input[type="radio"]:checked::before {
+    content: '';
+    display: block;
+    width: 8px;
+    height: 8px;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#startGameBtn {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+    align-self: center; /* Центрира бутона */
+}
+
+#startGameBtn:not([disabled]):hover {
+    background-color: var(--primary-hover-focus-color);
+    transform: translateY(-2px);
+}
+
+#startGameBtn:disabled {
+    background-color: var(--disabled-button-color);
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+#gameMessage {
+    margin-top: 20px;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: var(--text-color-dark);
+    min-height: 1.5em; /* За да запази височина, дори когато е празно */
+    opacity: 0; /* Скриваме по подразбиране */
+    transform: scale(0.8); /* Започваме малко смалено */
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out; /* Анимация */
+}
+
+#gameMessage.message-animate {
+    opacity: 1;
+    transform: scale(1);
+}
+
+#gameMessage.message-success {
+    color: var(--success-color);
+}
+
+#gameMessage.message-error {
+    color: var(--error-color);
+}
+
+#controls {
+    margin-top: 20px;
+    display: flex;
+    gap: 15px;
+}
+
+#controls button {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#controls button:hover {
+    background-color: var(--primary-hover-focus-color);
+}
+
+#container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    gap: 30px; /* Разстояние между двете секции с картинки */
+}
+
+.game-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    border-radius: 15px;
+    background-color: rgba(255, 255, 255, 0.85); /* Полупрозрачен бял фон */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    max-width: 900px;
+    width: 90%;
+}
+
+#gamePics img,
+#allPics img {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border: 4px solid var(--border-color-light);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out, border-color 0.2s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#gamePics img:hover,
+#allPics img:hover {
+    transform: scale(1.05);
+    border-color: var(--primary-color);
+}
+
+/* Overlay за скриване на картинката */
+.hidden-pic-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('images/hide.png'); /* Изображението, което скрива */
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px; /* Заобляме ъглите като картинката */
+    opacity: 0; /* Скрит по подразбиране */
+    transition: opacity 0.3s ease-in-out;
+    pointer-events: none; /* Позволява клик през овърлея */
+}
+
+.hidden-pic-overlay.is-visible {
+    opacity: 1;
+    pointer-events: all; /* Връща клик събитията, когато е видим */
+}
+
+
+.hidden {
+    display: none !important;
+}
+
+/* --- Фонове за страниците --- */
+
+/* Стартова страница с менюто - АКТУАЛИЗИРАН ФОН */
+body.start-bg {
+    background-image: url('images/fon1.jpg'); /* Вашето изображение с вълни */
+    background-size: cover; /* За да покрие целия екран */
+    background-position: center center; /* За да е центрирано */
+    background-repeat: no-repeat; /* Да не се повтаря */
+    background-attachment: fixed; /* Да стои фиксирано при скрол */
+    
+    /* Добавяме градиента ОТГОРЕ на изображението, като използваме multiple backgrounds */
+    background: linear-gradient(rgba(179, 229, 252, 0.7), rgba(178, 255, 89, 0.7)), /* Бледосиньо към бледозелено с прозрачност */
+                url('images/fon1.jpg') no-repeat center center fixed; /* Изображението с вълни */
+    background-size: cover; /* Прилага се за всички фонове */
+    transition: background 0.8s ease-in-out; /* Плавен преход между фоновете */
+}
+
+
+/* Игрова страница - Превозни средства */
+body.vehicles-bg {
+    background: url('images/road_lines_pattern.png') repeat center center; /* Пример 1: Пътни линии */
+    background-size: cover; /* Уверете се, че покрива целия екран */
+    transition: background 0.8s ease-in-out;
+}
+
+/* Игрова страница - Животни */
+body.animals-bg {
+    background: url('images/jungle_pattern.png') repeat center center; /* Пример 1: Горска текстура */
+    background-size: cover;
+    transition: background 0.8s ease-in-out;
+}
+
+/* Игрова страница - Цветя */
+body.flowers-bg {
+    background: url('images/floral_bokeh.jpg') no-repeat center center fixed; /* Пример 1: Боке с цветя */
+    background-size: cover;
+    transition: background 0.8s ease-in-out;
+}
+
+/* --- Край на фоновете --- */
+
+/* 📱 Адаптация за таблети */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.6rem;
+    margin: 0.6rem 0;
+  }
+  .game-section h2 {
+      font-size: 1.2rem;
+  }
+  #gameMessage {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+  }
+  #gamePics img {
+    width: 150px;
+    height: 150px;
+  }
+  #allPics img {
+    width: 100px;
+    height: 100px;
+  }
+  button {
+    font-size: 0.8rem;
+    padding: 7px 14px;
+  }
+  #gamePics, #allPics {
+      gap: 10px;
+      padding: 10px;
+  }
+  #container {
+      gap: 20px;
+  }
+  #optionsContainer {
+      font-size: 0.95rem;
+      padding: 12px;
+      gap: 10px;
+  }
+}
+
+/* 📱 Адаптация за телефони */
+@media (max-width: 480px) {
+  body {
+      padding: 5px;
+  }
+  h1 {
+    font-size: 1.3rem;
+    margin: 0.5rem 0;
+  }
+  #gameMessage {
+    font-size: 1em;
+  }
+  #gamePics img {
+    width: 100px;
+    height: 100px;
+    border-width: 2px;
+  }
+  #allPics img {
+    width: 70px;
+    height: 70px;
+    border-width: 2px;
+  }
+  #optionsContainer {
+      font-size: 0.9rem;
+      padding: 10px;
+  }
+}
