@@ -33,10 +33,10 @@ h1 {
   color: var(--text-color-dark);
   margin: 1rem 0;
   font-size: 2rem;
-  padding: 10px 20px;
-  border-radius: 10px;
-  background-color: rgba(255, 255, 255, 0.7);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 10px 20px; /* Добавяме паддинг */
+  border-radius: 10px; /* Заобляме ъглите */
+  background-color: rgba(255, 255, 255, 0.7); /* Полупрозрачен бял фон */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Лека сянка */
 }
 
 /* 🌟 Цветове за текстовите редове в опциите */
@@ -52,43 +52,43 @@ h1 {
 }
 /* За бутона, променяме цвета на текста */
 #startGameBtn.option-line-3 {
-    color: green;
+    color: green; /* Цветен текст на бутона - ТЪМНО ЗЕЛЕН */
     font-weight: bold;
-    background-color: var(--primary-color);
+    background-color: var(--primary-color); /* Можете да запазите или промените фона */
 }
 
 /* 🌟 Нови стилове за конкретните теми */
 #optionsContainer .theme-animals {
-    color: brown;
+    color: brown; /* Кафяв цвят за "Животни" */
     font-weight: bold;
 }
 
 #optionsContainer .theme-flowers {
-    color: green;
+    color: green; /* Зелен цвят за "Цветя" */
     font-weight: bold;
 }
 
 
 #optionsContainer {
-  background-color: rgba(255, 255, 255, 0.85);
+  background-color: rgba(255, 255, 255, 0.85); /* Полупрозрачен бял фон */
   padding: 20px;
   border-radius: 15px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 15px; /* Разстояние между елементите в контейнера */
   margin-top: 20px;
-  max-width: 400px;
-  width: 90%;
-  align-items: flex-start;
-  text-align: left;
+  max-width: 400px; /* Ограничаваме ширината */
+  width: 90%; /* Адаптивна ширина */
+  align-items: center; /* ПРОМЯНА: Центрираме елементите хоризонтално */
+  text-align: center; /* ПРОМЯНА: Центрираме текста */
 }
 
 #optionsContainer h2 {
     color: var(--primary-color);
     margin-top: 0;
     margin-bottom: 10px;
-    align-self: center;
+    align-self: center; /* Центрира заглавието */
 }
 
 #optionsContainer p {
@@ -99,9 +99,10 @@ h1 {
 #themeOptions,
 #countOptions {
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+    flex-wrap: wrap; /* Позволява преминаване на нов ред за малки екрани */
+    gap: 10px; /* Разстояние между радио бутоните */
     margin-bottom: 10px;
+    justify-content: center; /* НОВО: Центрира радио бутоните */
 }
 
 #themeOptions label,
@@ -125,7 +126,7 @@ h1 {
 
 #themeOptions input[type="radio"],
 #countOptions input[type="radio"] {
-    appearance: none;
+    appearance: none; /* Скрива стандартния радио бутон */
     width: 16px;
     height: 16px;
     border: 2px solid var(--primary-color);
@@ -133,7 +134,7 @@ h1 {
     position: relative;
     cursor: pointer;
     outline: none;
-    flex-shrink: 0;
+    flex-shrink: 0; /* Предотвратява свиване */
 }
 
 #themeOptions input[type="radio"]:checked::before,
@@ -152,19 +153,25 @@ h1 {
 
 #startGameBtn {
     background-color: var(--primary-color);
-    color: white;
+    color: white; /* Този цвят се презаписва от option-line-3 */
     padding: 12px 25px;
     border: none;
     border-radius: 8px;
     font-size: 1.1em;
     cursor: pointer;
     transition: background-color 0.2s, transform 0.2s;
-    align-self: center;
+    align-self: center; /* Центрира бутона */
 }
 
 #startGameBtn:not([disabled]):hover {
-    background-color: var(--primary-hover-focus-color);
+    background-color: #E6F7FF; /* ПРОМЯНА: Много светъл син цвят за добър контраст с тъмнозелен текст */
     transform: translateY(-2px);
+}
+
+#startGameBtn:focus { /* НОВО: Добавяме стил и за фокус */
+    background-color: #E6F7FF; /* Същият много светъл син цвят */
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.4);
 }
 
 #startGameBtn:disabled {
@@ -175,18 +182,25 @@ h1 {
 
 #gameMessage {
     margin-top: 20px;
-    font-size: 1.5em;
+    font-size: 1.8em; /* ПРОМЯНА: Увеличен размер на шрифта по подразбиране */
     font-weight: bold;
     color: var(--text-color-dark);
-    min-height: 1.5em;
-    opacity: 0;
-    transform: scale(0.8);
-    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    min-height: 2.5em; /* ПРОМЯНА: Увеличена минимална височина за два реда */
+    opacity: 0; /* Скриваме по подразбиране */
+    transform: scale(0.8); /* Започваме малко смалено */
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out, font-size 0.5s ease-out; /* Анимация */
+    display: flex; /* НОВО: Използваме flexbox за центриране на текста */
+    align-items: center; /* НОВО: Центрираме текста вертикално */
+    justify-content: center; /* НОВО: Центрираме текста хоризонтално */
+    text-align: center; /* НОВО: Гарантираме центриране на текста */
+    padding: 5px; /* НОВО: Добавяме малко вътрешен отстъп */
+    box-sizing: border-box; /* НОВО: За да не се разширява с padding-а */
 }
 
 #gameMessage.message-animate {
     opacity: 1;
     transform: scale(1);
+    font-size: 2.8em; /* ПРОМЯНА: Още по-голям размер на шрифта при анимация */
 }
 
 #gameMessage.message-success {
@@ -223,7 +237,7 @@ h1 {
     flex-direction: column;
     align-items: center;
     margin-top: 20px;
-    gap: 30px;
+    gap: 30px; /* Разстояние между двете секции с картинки */
 }
 
 .game-section {
@@ -233,51 +247,130 @@ h1 {
     gap: 20px;
     padding: 20px;
     border-radius: 15px;
-    background-color: rgba(255, 255, 255, 0.85);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    max-width: 900px;
-    width: 90%;
+    background-color: rgba(255, 255, 255, 0.85); /* Полупрозрачен бял фон */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
 }
 
-#gamePics img,
-#allPics img {
-    width: 180px;
-    height: 180px;
-    object-fit: cover;
-    border: 4px solid var(--border-color-light);
-    border-radius: 10px;
-    cursor: pointer;
-    transition: transform 0.2s ease-in-out, border-color 0.2s;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.game-section h2 {
+    font-size: 1.5rem;
+    color: var(--text-color-dark);
+    margin-top: 0;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color-light);
+    width: 100%; /* Гарантира, че заглавието заема цялата ширина */
+    text-align: center; /* Центрира заглавието в секцията */
 }
 
-#gamePics img:hover,
-#allPics img:hover {
-    transform: scale(1.05);
-    border-color: var(--primary-color);
+#gamePics {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  background-color: var(--background-game-section-1);
+  border: 2px solid var(--border-color-primary);
+  border-radius: 10px;
+  padding: 15px;
+  min-height: 180px;
+}
+
+#gamePics img {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  object-position: center;
+  cursor: pointer;
+  border: 2px solid var(--border-color-dark);
+  border-radius: 10px;
+  /* Сега ще използваме opacity и visibility за скриване/показване */
+  transition: opacity 0.5s ease-out, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 /* Overlay за скриване на картинката */
-.hidden-pic-overlay {
+.hide-overlay { /* Променено от hidden-pic-overlay */
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('images/hide.png');
+    width: 180px; /* Трябва да е същата ширина като картинките */
+    height: 180px; /* Трябва да е същата височина като картинките */
+    background-image: url('images/hide.png'); /* Изображението, което скрива */
     background-size: cover;
     background-position: center;
-    border-radius: 10px;
-    opacity: 0;
+    border-radius: 10px; /* Заобляме ъглите като картинката */
+    opacity: 0; /* Скрит по подразбиране */
     transition: opacity 0.3s ease-in-out;
-    pointer-events: none;
+    pointer-events: none; /* Позволява клик през овърлея */
+    z-index: 10; /* НОВО: За да е над картинките */
 }
 
-.hidden-pic-overlay.is-visible {
+.hide-overlay.is-visible {
     opacity: 1;
-    pointer-events: all;
+    pointer-events: all; /* Връща клик събитията, когато е видим */
 }
 
+/* КЛЮЧОВА ПРОМЯНА: is-hidden просто скрива картинката */
+#gamePics img.is-hidden {
+    opacity: 0;
+    visibility: hidden; /* Скриваме я напълно */
+    pointer-events: none; /* Не може да се клика, докато е скрита */
+}
+
+/* Клас за анимация на връщане */
+#gamePics img.revealed-animation {
+    animation: revealPulse 0.8s ease-out;
+}
+
+@keyframes revealPulse {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    70% {
+        opacity: 1;
+        transform: scale(1.05); /* Леко уголемяване */
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1); /* Връщане към нормален размер */
+    }
+}
+
+
+#gamePics img:not(.is-hidden):hover,
+#gamePics img:not(.is-hidden):focus {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.6);
+  outline: none;
+}
+
+#allPics {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  background-color: var(--background-game-section-2);
+  border: 2px dashed var(--dashed-border-color);
+  border-radius: 10px;
+  padding: 15px;
+}
+
+#allPics img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  object-position: center;
+  cursor: pointer;
+  border: 2px solid var(--border-color-dark);
+  border-radius: 10px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#allPics img:hover,
+#allPics img:focus {
+  transform: scale(1.05);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+  outline: none;
+}
 
 .hidden {
     display: none !important;
@@ -285,7 +378,7 @@ h1 {
 
 /* --- Фонове за страниците --- */
 
-/* Стартова страница с менюто - АКТУАЛИЗИРАН ФОН (без градиент засега) */
+/* Стартова страница с менюто */
 body.start-bg {
     background-image: url('images/fon1.jpg'); /* Вашето изображение с вълни */
     background-size: cover; /* За да покрие целия екран */
@@ -329,8 +422,11 @@ body.flowers-bg {
       font-size: 1.2rem;
   }
   #gameMessage {
-      font-size: 1.1rem;
-      margin-bottom: 8px;
+      font-size: 1.4rem; /* ПРОМЯНА: Адаптация за таблети */
+      min-height: 2em; /* ПРОМЯНА: Адаптация за таблети */
+  }
+  #gameMessage.message-animate {
+      font-size: 2.2rem; /* ПРОМЯНА: Адаптация за таблети */
   }
   #gamePics img {
     width: 150px;
@@ -355,6 +451,8 @@ body.flowers-bg {
       font-size: 0.95rem;
       padding: 12px;
       gap: 10px;
+      align-items: center; /* ПРОМЯНА: Центрираме елементите хоризонтално */
+      text-align: center; /* ПРОМЯНА: Центрираме текста */
   }
 }
 
@@ -367,21 +465,45 @@ body.flowers-bg {
     font-size: 1.3rem;
     margin: 0.5rem 0;
   }
+  .game-section h2 {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+  }
   #gameMessage {
-    font-size: 1em;
+      font-size: 1.1rem; /* ПРОМЯНА: Адаптация за телефони */
+      min-height: 1.8em; /* ПРОМЯНА: Адаптация за телефони */
+  }
+  #gameMessage.message-animate {
+    font-size: 1.8rem; /* ПРОМЯНА: Адаптация за телефони */
+  }
+  #gamePics, #allPics {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 5px;
   }
   #gamePics img {
-    width: 100px;
-    height: 100px;
-    border-width: 2px;
-  }
-  #allPics img {
     width: 70px;
     height: 70px;
-    border-width: 2px;
+  }
+  #allPics img {
+    width: 50px;
+    height: 50px;
+  }
+  #container {
+      gap: 15px;
+      margin: 5px auto;
+  }
+  button {
+    font-size: 0.75rem;
+    padding: 5px 10px;
   }
   #optionsContainer {
-      font-size: 0.9rem;
-      padding: 10px;
+      font-size: 0.85rem;
+      padding: 8px;
+      gap: 8px;
+      align-items: center; /* ПРОМЯНА: Центрираме елементите хоризонтално */
+      text-align: center; /* ПРОМЯНА: Центрираме текста */
   }
 }
