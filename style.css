@@ -16,23 +16,34 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 10px;
-  text-align: center;
-  background-color: var(--background-light);
-  background-image: url('images/fon1.jpg');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding-top: 2rem;
-  min-height: 100vh;
-  box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 2rem;
+    min-height: 100vh;
+    box-sizing: border-box;
+    /* Преход за плавна смяна на фона */
+    transition: background-image 0.5s ease-in-out;
 }
+
+/* Клас за фона на менюто */
+.bg-menu {
+    background-image: url('images/fon1.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+/* Клас за фона на играта */
+.bg-game {
+    background-image: linear-gradient(to bottom left, #d2f8d2, #a6e7ff);
+}
+
 
 #gameTitle {
   font-size: 6.5rem;
@@ -87,8 +98,8 @@ body {
   margin-bottom: 15px;
 }
 
-/* --- Стил за бутони - Вариант 3 --- */
-button {
+/* --- Стил за бутони с КЛАС --- */
+.game-btn {
   padding: 12px 24px;
   margin: 5px;
   font-size: 16px;
@@ -103,14 +114,14 @@ button {
   box-shadow: 0 5px 15px rgba(221, 36, 118, 0.4);
 }
 
-button:hover, button:focus {
+.game-btn:hover, .game-btn:focus {
   background-position: right center;
   box-shadow: 0 8px 20px rgba(221, 36, 118, 0.5);
   transform: translateY(-3px);
   outline: none;
 }
 
-button:disabled {
+.game-btn:disabled {
   background-image: none;
   background-color: var(--disabled-button-color);
   box-shadow: none;
@@ -120,12 +131,22 @@ button:disabled {
 
 /* Икони за специфични бутони */
 #start::before {
-  content: '▶️ ';
+  content: '🎩 ';
   margin-right: 5px;
 }
 
 #reload::before {
-  content: '🔄 ';
+  content: '✨ ';
+  margin-right: 5px;
+}
+
+#backToMenu::before {
+  content: '🏠 ';
+  margin-right: 5px;
+}
+
+#startGameBtn::before {
+  content: '🚀 ';
   margin-right: 5px;
 }
 /* --- Край на стила за бутони --- */
@@ -256,7 +277,7 @@ button:disabled {
 .option-line-2 { color: blue; }
 
 #startGameBtn.option-line-3 {
-    color: white; /* Променено, за да съответства на новия стил */
+    color: white;
     font-weight: bold;
 }
 
